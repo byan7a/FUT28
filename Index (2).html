@@ -1,0 +1,1969 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950 text-slate-100 dark" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>38-0: Ultimate FUT Draft, League & UCL Champions</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        pitch: {
+                            950: '#020f09',
+                            900: '#052214',
+                            800: '#0b3d24',
+                            700: '#135c37',
+                            600: '#1d824f',
+                            grass: '#15803d',
+                            vibrant: '#16a34a',
+                            bright: '#22c55e'
+                        },
+                        fut: {
+                            gold: '#f3d052',
+                            goldDark: '#9a7711',
+                            cardBg: '#131927',
+                            border: 'rgba(243, 208, 82, 0.4)',
+                            glow: 'rgba(243, 208, 82, 0.6)',
+                            goat: '#38bdf8',
+                            ucl: '#1e40af'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Teko', 'Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(2, 15, 9, 0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(34, 197, 94, 0.5); border-radius: 9999px; }
+
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .theme-dark {
+            background-color: #020617;
+            color: #f8fafc;
+        }
+
+        .theme-light {
+            background-color: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .theme-dark .glass-card {
+            background: rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #f8fafc;
+        }
+
+        .theme-light .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+            color: #0f172a;
+        }
+
+        .theme-light .text-slate-400 { color: #64748b !important; }
+        .theme-light .bg-slate-900 { background-color: #e2e8f0 !important; color: #0f172a !important; }
+        .theme-light .border-slate-800 { border-color: #cbd5e1 !important; }
+
+        /* Pitch Styles */
+        .glass-pitch {
+            transition: all 0.4s ease;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5), 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .pitch-vibrant {
+            background: radial-gradient(circle at center, #16a34a 0%, #15803d 60%, #0b3d24 100%);
+            border: 3px solid #22c55e;
+        }
+
+        .pitch-emerald {
+            background: linear-gradient(180deg, #059669 0%, #047857 50%, #065f46 100%);
+            border: 3px solid #34d399;
+        }
+
+        .pitch-night {
+            background: radial-gradient(circle at center, #1e3a8a 0%, #0f172a 70%, #020617 100%);
+            border: 3px solid #38bdf8;
+        }
+
+        .pitch-pattern-striped {
+            background-image: repeating-linear-gradient(
+                0deg,
+                rgba(255, 255, 255, 0.08),
+                rgba(255, 255, 255, 0.08) 36px,
+                transparent 36px,
+                transparent 72px
+            );
+        }
+
+        /* FUT Cards Styling */
+        .fut-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid #64748b;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .fut-card.bronze {
+            background: linear-gradient(135deg, #78350f 0%, #451a03 100%);
+            border-color: #b45309;
+            color: #fef3c7;
+        }
+
+        .fut-card.silver {
+            background: linear-gradient(135deg, #475569 0%, #1e293b 100%);
+            border-color: #94a3b8;
+            color: #f8fafc;
+        }
+
+        .fut-card.gold-rare {
+            background: linear-gradient(135deg, #854d0e 0%, #451a03 40%, #a16207 100%);
+            border-color: #facc15;
+            box-shadow: 0 0 15px rgba(250, 204, 21, 0.3);
+            color: #fef08a;
+        }
+
+        .fut-card.goat-card {
+            background: linear-gradient(135deg, #0284c7 0%, #0f172a 50%, #38bdf8 100%);
+            border-color: #7dd3fc;
+            color: #f0f9ff;
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.8);
+            animation: goat-shimmer 2.5s infinite alternate ease-in-out;
+        }
+
+        .fut-card.ucl-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #172554 50%, #1d4ed8 100%);
+            border-color: #60a5fa;
+            color: #dbeafe;
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.6);
+        }
+
+        @keyframes goat-shimmer {
+            0% { box-shadow: 0 0 15px rgba(56, 189, 248, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.4); }
+            100% { box-shadow: 0 0 32px rgba(56, 189, 248, 1), inset 0 0 22px rgba(255, 255, 255, 0.8); }
+        }
+
+        .walkout-glow {
+            animation: walkout-pulse 1.2s infinite alternate ease-in-out;
+        }
+
+        @keyframes walkout-pulse {
+            0% { box-shadow: 0 0 20px rgba(250, 204, 21, 0.5); transform: scale(1); }
+            100% { box-shadow: 0 0 40px rgba(250, 204, 21, 1); transform: scale(1.02); }
+        }
+
+        .slot-pulse {
+            animation: slot-glow 2s infinite ease-in-out;
+        }
+
+        @keyframes slot-glow {
+            0%, 100% { border-color: rgba(34, 197, 94, 0.5); }
+            50% { border-color: rgba(34, 197, 94, 1); box-shadow: 0 0 15px rgba(34, 197, 94, 0.6); }
+        }
+
+        /* Commentary Log Ticker Styling */
+        .commentary-entry {
+            border-left: 3px solid #3b82f6;
+            padding-left: 8px;
+            animation: fadeIn 0.3s ease-in;
+        }
+        .commentary-entry.goal {
+            border-left-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+        .commentary-entry.card {
+            border-left-color: #eab308;
+            background: rgba(234, 179, 8, 0.1);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="h-full theme-dark font-sans antialiased select-none flex flex-col justify-between overflow-x-hidden transition-colors duration-300">
+
+    <!-- FX CANVAS FOR CELEBRATIONS -->
+    <canvas id="fxCanvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+    <!-- HEADER / WALLET HUD -->
+    <header class="w-full z-20 px-3 sm:px-6 py-3 glass-card border-b flex items-center justify-between gap-3 sticky top-0 shadow-md">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-300 text-slate-950 flex items-center justify-center font-black text-xl shadow-lg shadow-amber-500/20">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <div>
+                <h1 class="font-display text-2xl leading-none font-extrabold tracking-wider">38-0 <span class="text-amber-400 font-mono text-xs px-2 py-0.5 rounded bg-amber-950/80 border border-amber-700">ULTIMATE CHAMPIONS</span></h1>
+                <p class="text-[11px] text-slate-400 font-medium hidden sm:block">Build Squad • 5 Leagues • UCL Tournament • Hard AI</p>
+            </div>
+        </div>
+
+        <!-- Wallet Balance, Autosell & Controls -->
+        <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Selected League Badge -->
+            <div id="leagueBadgeDisplay" class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-blue-950/80 border border-blue-600/50 text-blue-300 text-xs font-bold font-mono">
+                <i class="fa-solid fa-earth-europe text-blue-400"></i> <span id="activeLeagueName">Premier League</span>
+            </div>
+
+            <!-- Cash Wallet -->
+            <div class="flex items-center gap-2 bg-slate-900/90 border border-amber-500/40 px-3 py-1.5 rounded-xl shadow-inner relative">
+                <div class="w-6 h-6 rounded-full bg-amber-500/20 border border-amber-400 text-amber-400 flex items-center justify-center text-xs font-bold">
+                    <i class="fa-solid fa-sack-dollar"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-[9px] text-slate-400 uppercase font-semibold leading-none">Club Funds</span>
+                    <span id="cashDisplay" class="font-mono text-amber-400 font-black text-base sm:text-lg leading-tight">$1,000</span>
+                </div>
+            </div>
+
+            <!-- Auto-Sell Duplicates Toggle -->
+            <button id="btnAutoSellToggle" title="Auto-Sell Duplicate Cards" class="px-2.5 py-1.5 rounded-xl glass-card hover:bg-slate-800 font-bold text-xs flex items-center gap-1.5 transition border border-slate-700">
+                <i id="autoSellIcon" class="fa-solid fa-arrows-rotate text-slate-400"></i>
+                <span class="hidden md:inline text-[11px]">Auto-Sell: <strong id="autoSellStateText" class="text-red-400">OFF</strong></span>
+            </button>
+
+            <!-- Theme Toggle -->
+            <button id="btnThemeToggle" title="Toggle Light/Dark Theme" class="px-2.5 py-1.5 rounded-xl glass-card hover:bg-amber-500/20 font-bold text-xs flex items-center gap-1.5 transition border border-amber-500/30 text-amber-400">
+                <i id="themeIcon" class="fa-solid fa-moon"></i>
+                <span id="themeLabel" class="hidden md:inline">Dark</span>
+            </button>
+
+            <!-- Audio Toggle -->
+            <button id="btnSound" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl glass-card hover:bg-slate-800 text-slate-300 flex items-center justify-center transition border border-slate-700">
+                <i id="soundIcon" class="fa-solid fa-volume-high text-xs sm:text-sm"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- NAVIGATION TABS BAR -->
+    <nav class="bg-slate-900/90 border-b border-slate-800 px-2 sm:px-3 py-2 flex items-center justify-center gap-1.5 sm:gap-3 text-xs font-bold overflow-x-auto">
+        <button id="tabSquad" class="tab-btn px-3 sm:px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-black flex items-center gap-1.5 sm:gap-2 transition shadow-md whitespace-nowrap">
+            <i class="fa-solid fa-shirt"></i> Pitch Squad
+        </button>
+        <button id="tabMarket" class="tab-btn px-3 sm:px-4 py-2 rounded-xl glass-card text-slate-300 hover:text-white flex items-center gap-1.5 sm:gap-2 transition border border-slate-800 whitespace-nowrap">
+            <i class="fa-solid fa-right-left text-emerald-400"></i> Market & Loans
+        </button>
+        <button id="tabShop" class="tab-btn px-3 sm:px-4 py-2 rounded-xl glass-card text-slate-300 hover:text-white flex items-center gap-1.5 sm:gap-2 transition border border-slate-800 whitespace-nowrap">
+            <i class="fa-solid fa-store text-amber-400"></i> Pack Store
+        </button>
+        <button id="tabClub" class="tab-btn px-3 sm:px-4 py-2 rounded-xl glass-card text-slate-300 hover:text-white flex items-center gap-1.5 sm:gap-2 transition border border-slate-800 whitespace-nowrap">
+            <i class="fa-solid fa-boxes-stacked text-sky-400"></i> Club (<span id="clubCountBadge">0</span>)
+        </button>
+        <button id="tabSeason" class="tab-btn px-3 sm:px-4 py-2 rounded-xl glass-card text-slate-300 hover:text-white flex items-center gap-1.5 sm:gap-2 transition border border-slate-800 whitespace-nowrap">
+            <i class="fa-solid fa-flag-checkered text-emerald-400"></i> League Campaign
+        </button>
+        <button id="tabUCL" class="tab-btn px-3 sm:px-4 py-2 rounded-xl glass-card text-blue-400 hover:text-blue-300 flex items-center gap-1.5 sm:gap-2 transition border border-blue-800/60 whitespace-nowrap relative">
+            <i class="fa-solid fa-star text-amber-400"></i> Champions League <span id="uclBadge" class="bg-amber-500 text-slate-950 text-[9px] px-1.5 rounded-full font-black hidden">LOCKED</span>
+        </button>
+    </nav>
+
+    <!-- MAIN CONTENT VIEW CONTAINERS -->
+    <main class="flex-1 container mx-auto px-2 sm:px-4 py-4 max-w-6xl">
+
+        <!-- VIEW 1: PITCH & SQUAD BUILDER -->
+        <section id="viewSquad" class="flex flex-col lg:flex-row gap-4 items-start justify-center">
+            
+            <!-- Left Pitch Column -->
+            <div class="w-full lg:w-7/12 flex flex-col gap-3">
+                <!-- Squad Header Controls & Pitch Color Selection -->
+                <div class="glass-card p-3 rounded-2xl flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <div class="flex items-center gap-2">
+                        <label class="text-slate-400 font-bold uppercase text-[11px]">Formation:</label>
+                        <select id="selectFormation" class="bg-slate-900 border border-slate-700 text-amber-400 font-bold rounded-lg px-2.5 py-1 focus:outline-none focus:border-amber-500">
+                            <option value="4-3-3">4-3-3 (Attack)</option>
+                            <option value="4-4-2">4-4-2 (Classic)</option>
+                            <option value="4-2-3-1">4-2-3-1 (Balanced)</option>
+                            <option value="3-5-2">3-5-2 (Wingback)</option>
+                        </select>
+                    </div>
+
+                    <!-- Vibrant Pitch Style Selector -->
+                    <div class="flex items-center gap-2">
+                        <label class="text-slate-400 font-bold uppercase text-[11px]"><i class="fa-solid fa-palette text-amber-400"></i> Turf:</label>
+                        <select id="selectPitchTheme" class="bg-slate-900 border border-slate-700 text-emerald-400 font-bold rounded-lg px-2 py-1 focus:outline-none">
+                            <option value="pitch-vibrant">Vibrant Green</option>
+                            <option value="pitch-emerald">Emerald Lawn</option>
+                            <option value="pitch-night">Night Floodlight</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center gap-4 font-mono">
+                        <div>
+                            <span class="text-slate-400 text-[10px] block leading-none">OVR</span>
+                            <span id="squadRatingText" class="text-xl font-black text-amber-400 font-display">0</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 text-[10px] block leading-none">CHEM</span>
+                            <span id="squadChemText" class="text-xl font-black text-emerald-400 font-display">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLOURED TACTICAL PITCH -->
+                <div id="pitchArena" class="glass-pitch pitch-vibrant pitch-pattern-striped w-full aspect-[4/5] sm:aspect-[4/3] rounded-2xl p-3 relative flex flex-col justify-between overflow-hidden shadow-2xl">
+                    <!-- Pitch Markings Overlay -->
+                    <div class="absolute inset-0 pointer-events-none opacity-40 border-2 border-white/70 m-2 rounded-xl flex flex-col justify-between items-center">
+                        <div class="w-32 h-14 border-b-2 border-x-2 border-white/80 bg-white/5"></div>
+                        <div class="w-full border-t-2 border-white/80 relative flex justify-center items-center">
+                            <div class="w-28 h-28 border-2 border-white/80 rounded-full absolute bg-white/5"></div>
+                            <div class="w-2 h-2 bg-white rounded-full absolute"></div>
+                        </div>
+                        <div class="w-32 h-14 border-t-2 border-x-2 border-white/80 bg-white/5"></div>
+                    </div>
+
+                    <!-- Dynamic Pitch Position Grid -->
+                    <div id="pitchGrid" class="relative w-full h-full z-10 flex flex-col justify-between py-1">
+                        <!-- Positions rendered dynamically by JS -->
+                    </div>
+                </div>
+
+                <!-- Quick Squad Actions -->
+                <div class="flex items-center justify-between gap-2">
+                    <button id="btnAutoBestSquad" class="px-3.5 py-2 rounded-xl glass-card hover:bg-slate-800 text-slate-300 font-bold text-xs border border-slate-700 transition flex items-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Auto-Fill Best Squad
+                    </button>
+                    <button id="btnClearSquad" class="px-3.5 py-2 rounded-xl glass-card hover:bg-red-950 text-red-300 font-bold text-xs border border-red-900/50 transition flex items-center gap-2">
+                        <i class="fa-solid fa-trash-can"></i> Clear Pitch
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Column: Bench & Reserves Panel -->
+            <div class="w-full lg:w-5/12 flex flex-col gap-3">
+                <div class="glass-card p-4 rounded-2xl border border-slate-800 flex flex-col gap-3 min-h-[420px]">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <h3 class="font-bold text-amber-400 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-users-viewfinder"></i> Bench & Club Reserve Players
+                        </h3>
+                        <span class="text-[11px] text-slate-400">No pitch duplicates allowed!</span>
+                    </div>
+
+                    <!-- Quick Filter Search -->
+                    <div class="flex gap-1.5">
+                        <input id="benchSearch" type="text" placeholder="Search reserve player..." class="flex-1 bg-slate-900 border border-slate-800 text-xs text-white rounded-lg px-3 py-1.5 focus:outline-none focus:border-amber-500">
+                    </div>
+
+                    <!-- Bench Grid -->
+                    <div id="benchContainer" class="grid grid-cols-3 sm:grid-cols-4 gap-2 overflow-y-auto max-h-[380px] p-1">
+                        <!-- Unassigned club players render here -->
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- VIEW 2: TRANSFER MARKET & LOANS -->
+        <section id="viewMarket" class="hidden flex-col gap-4">
+            <div class="glass-card p-4 rounded-2xl border border-emerald-500/30 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div>
+                    <h2 class="text-xl font-black text-emerald-400 font-display">GLOBAL TRANSFER MARKET & LOAN HUB</h2>
+                    <p class="text-xs text-slate-400">Buy star players directly, rent players on loan contracts, or sell players for cash!</p>
+                </div>
+                <button id="btnRefreshMarket" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs transition shadow-lg flex items-center gap-2">
+                    <i class="fa-solid fa-arrows-rotate"></i> Refresh Market Deals
+                </button>
+            </div>
+
+            <!-- Market Navigation Filters & Subtabs -->
+            <div class="glass-card p-3 rounded-xl flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2 text-xs">
+                    <button id="marketSubtabBuy" class="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-black">Buy Players</button>
+                    <button id="marketSubtabLoan" class="px-3 py-1.5 rounded-lg glass-card text-slate-300 font-bold border border-slate-800">Loan Player</button>
+                    <button id="marketSubtabSell" class="px-3 py-1.5 rounded-lg glass-card text-slate-300 font-bold border border-slate-800">List My Player</button>
+                </div>
+                <div class="flex items-center gap-2">
+                    <input id="marketSearch" type="text" placeholder="Search market player..." class="bg-slate-900 border border-slate-800 text-xs rounded-lg px-3 py-1.5 text-white focus:outline-none focus:border-amber-500">
+                </div>
+            </div>
+
+            <div id="marketBuyContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+            <div id="marketLoanContainer" class="hidden grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+            <div id="marketSellContainer" class="hidden flex-col gap-3">
+                <div class="glass-card p-3 rounded-xl text-xs text-slate-300">
+                    Select a player from your club inventory below to sell on the transfer market.
+                </div>
+                <div id="marketMyInventoryGrid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3"></div>
+            </div>
+        </section>
+
+        <!-- VIEW 3: PACK SHOP -->
+        <section id="viewShop" class="hidden flex-col gap-4">
+            <div class="glass-card p-4 rounded-2xl text-center border border-amber-500/20 mb-2 flex flex-col sm:flex-row justify-between items-center gap-3">
+                <div class="text-left">
+                    <h2 class="text-2xl font-black text-amber-400 font-display leading-tight">OFFICIAL FUT PACK STORE</h2>
+                    <p class="text-xs text-slate-400">Every pack guarantees <strong class="text-amber-400">3 PLAYERS</strong>! Pull Walkouts & 96-99 GOAT Icons!</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="glass-card p-5 rounded-2xl border border-amber-800/40 hover:border-amber-700/80 transition flex flex-col justify-between items-center text-center group">
+                    <div class="w-24 h-32 bg-gradient-to-b from-amber-800 to-stone-900 rounded-xl border-2 border-amber-700 flex flex-col items-center justify-center shadow-lg group-hover:scale-105 transition relative">
+                        <span class="absolute top-1 right-1 bg-amber-500 text-slate-950 text-[9px] font-black px-1.5 py-0.5 rounded-full">x3 PLAYERS</span>
+                        <i class="fa-solid fa-box-open text-amber-500 text-3xl mb-2"></i>
+                        <span class="font-black text-xs text-amber-300 font-mono">BRONZE</span>
+                    </div>
+                    <div class="my-3">
+                        <h3 class="font-extrabold text-white text-base">Bronze Starter Pack</h3>
+                        <p class="text-[11px] text-amber-400 font-bold mt-1">3 Players (Rating 68 - 78)</p>
+                    </div>
+                    <button onclick="purchasePack('bronze')" class="w-full py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg">Buy Pack ($50)</button>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-slate-700 hover:border-slate-500 transition flex flex-col justify-between items-center text-center group">
+                    <div class="w-24 h-32 bg-gradient-to-b from-slate-600 to-slate-900 rounded-xl border-2 border-slate-400 flex flex-col items-center justify-center shadow-lg group-hover:scale-105 transition relative">
+                        <span class="absolute top-1 right-1 bg-slate-300 text-slate-950 text-[9px] font-black px-1.5 py-0.5 rounded-full">x3 PLAYERS</span>
+                        <i class="fa-solid fa-box-open text-slate-300 text-3xl mb-2"></i>
+                        <span class="font-black text-xs text-slate-200 font-mono">SILVER</span>
+                    </div>
+                    <div class="my-3">
+                        <h3 class="font-extrabold text-white text-base">Silver Pro Pack</h3>
+                        <p class="text-[11px] text-slate-300 font-bold mt-1">3 Players (Rating 76 - 84)</p>
+                    </div>
+                    <button onclick="purchasePack('silver')" class="w-full py-2.5 rounded-xl bg-slate-300 hover:bg-white text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg">Buy Pack ($150)</button>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-amber-500/50 hover:border-amber-400 transition flex flex-col justify-between items-center text-center group">
+                    <div class="w-24 h-32 bg-gradient-to-b from-amber-500 via-amber-700 to-yellow-950 rounded-xl border-2 border-yellow-400 flex flex-col items-center justify-center shadow-lg group-hover:scale-105 transition relative">
+                        <span class="absolute top-1 right-1 bg-yellow-400 text-slate-950 text-[9px] font-black px-1.5 py-0.5 rounded-full">x3 PLAYERS</span>
+                        <i class="fa-solid fa-crown text-amber-300 text-3xl mb-2"></i>
+                        <span class="font-black text-xs text-amber-200 font-mono">GOLD RARE</span>
+                    </div>
+                    <div class="my-3">
+                        <h3 class="font-extrabold text-amber-400 text-base">Gold Rare Players Pack</h3>
+                        <p class="text-[11px] text-amber-300 font-bold mt-1">3 Players (Rating 82 - 92)</p>
+                    </div>
+                    <button onclick="purchasePack('gold')" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg">Buy Pack ($400)</button>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-emerald-500/50 hover:border-emerald-400 transition flex flex-col justify-between items-center text-center group">
+                    <div class="w-24 h-32 bg-gradient-to-b from-emerald-600 via-emerald-800 to-slate-950 rounded-xl border-2 border-emerald-400 flex flex-col items-center justify-center shadow-lg group-hover:scale-105 transition relative">
+                        <span class="absolute top-1 right-1 bg-emerald-400 text-slate-950 text-[9px] font-black px-1.5 py-0.5 rounded-full">x3 PLAYERS</span>
+                        <i class="fa-solid fa-gem text-emerald-300 text-3xl mb-2"></i>
+                        <span class="font-black text-xs text-emerald-200 font-mono">ELITE</span>
+                    </div>
+                    <div class="my-3">
+                        <h3 class="font-extrabold text-emerald-400 text-base">Elite Champions Pack</h3>
+                        <p class="text-[11px] text-emerald-300 font-bold mt-1">3 Players (Rating 87 - 95)</p>
+                    </div>
+                    <button onclick="purchasePack('elite')" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg">Buy Pack ($1,000)</button>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-sky-400/60 hover:border-sky-300 transition flex flex-col justify-between items-center text-center group sm:col-span-2 lg:col-span-1">
+                    <div class="w-24 h-32 bg-gradient-to-b from-sky-500 via-blue-700 to-slate-950 rounded-xl border-2 border-sky-300 flex flex-col items-center justify-center shadow-lg group-hover:scale-105 transition relative overflow-hidden">
+                        <span class="absolute top-1 right-1 bg-sky-300 text-slate-950 text-[9px] font-black px-1.5 py-0.5 rounded-full z-10">x3 PLAYERS</span>
+                        <i class="fa-solid fa-wand-magic-sparkles text-sky-200 text-3xl mb-2 z-10"></i>
+                        <span class="font-black text-xs text-sky-200 font-mono z-10">GOAT 96-99</span>
+                    </div>
+                    <div class="my-3">
+                        <h3 class="font-extrabold text-sky-300 text-base">Ultimate GOAT Icon Pack</h3>
+                        <p class="text-[11px] text-sky-200 font-bold mt-1">3 Players (Guaranteed GOAT 96-99)</p>
+                    </div>
+                    <button onclick="purchasePack('goat')" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-sky-400 to-blue-500 hover:from-sky-300 hover:to-blue-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg">Buy Pack ($2,500)</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 4: CLUB INVENTORY -->
+        <section id="viewClub" class="hidden flex-col gap-4">
+            <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 border border-slate-800">
+                <div>
+                    <h2 class="text-xl font-black font-display">YOUR CLUB INVENTORY</h2>
+                    <p class="text-xs text-slate-400">Manage your players, quick-sell duplicates, or prepare for matches!</p>
+                </div>
+                <button id="btnQuickSellDuplicates" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition shadow-lg flex items-center gap-2">
+                    <i class="fa-solid fa-coins"></i> Quick Sell Duplicates
+                </button>
+            </div>
+
+            <div class="glass-card p-3 rounded-xl flex items-center gap-3">
+                <input id="clubSearchInput" type="text" placeholder="Search player name, position, club..." class="flex-1 bg-slate-900 border border-slate-800 text-xs rounded-lg px-3 py-2 text-white focus:outline-none focus:border-amber-500">
+                <select id="clubSortSelect" class="bg-slate-900 border border-slate-800 text-amber-400 font-bold text-xs rounded-lg px-3 py-2 focus:outline-none">
+                    <option value="rating-desc">Rating (High to Low)</option>
+                    <option value="rating-asc">Rating (Low to High)</option>
+                    <option value="name">Name A-Z</option>
+                </select>
+            </div>
+
+            <div id="clubInventoryGrid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 min-h-[300px]"></div>
+        </section>
+
+        <!-- VIEW 5: LEAGUE CAMPAIGN & SELECTION -->
+        <section id="viewSeason" class="hidden flex-col gap-4">
+            <div class="glass-card p-4 rounded-2xl border border-slate-800 flex flex-col gap-4">
+                
+                <!-- League Choice Header Bar -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-800 pb-3 gap-3">
+                    <div>
+                        <h3 class="font-extrabold text-emerald-400 text-lg flex items-center gap-2">
+                            <i class="fa-solid fa-earth-europe"></i> Domestic League Campaign
+                        </h3>
+                        <p class="text-xs text-slate-400">Finish in the <strong class="text-amber-400">TOP 5</strong> to qualify for the UEFA Champions League!</p>
+                    </div>
+
+                    <!-- League Selection Dropdown -->
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs text-slate-400 font-bold">Change League:</label>
+                        <select id="selectLeagueChoice" class="bg-slate-900 border border-amber-500/50 text-amber-400 font-extrabold text-xs rounded-xl px-3 py-1.5 focus:outline-none">
+                            <option value="epl">Premier League (England)</option>
+                            <option value="laliga">LaLiga (Spain)</option>
+                            <option value="bundesliga">Bundesliga (Germany)</option>
+                            <option value="seriea">Serie A / Liga Italia (Italy)</option>
+                            <option value="ligue1">Ligue 1 (France)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Season Progress Bar -->
+                <div class="space-y-1.5">
+                    <div class="flex justify-between text-xs text-slate-400 font-semibold">
+                        <span>League Fixtures: <strong id="fixtureCount" class="text-amber-400">0 / 38</strong></span>
+                        <span id="simRecord" class="font-mono text-amber-400 font-extrabold">0W - 0D - 0L</span>
+                    </div>
+                    <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+                        <div id="progressBar" class="h-full bg-gradient-to-r from-emerald-500 to-amber-400 transition-all duration-300 w-0"></div>
+                    </div>
+                </div>
+
+                <!-- Simulation Controls -->
+                <div class="flex items-center gap-2 pt-1">
+                    <button id="btnStartSimulation" disabled class="flex-1 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 text-slate-950 font-black text-sm uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-play"></i> Play League Match
+                    </button>
+                    <button id="btnFastSim" disabled class="px-5 py-3 rounded-xl glass-card hover:bg-slate-800 disabled:opacity-40 text-xs font-bold border border-slate-700 transition">
+                        <i class="fa-solid fa-forward"></i> Instant Season Sim
+                    </button>
+                </div>
+
+                <!-- League Table & Match Feed Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-2">
+                    <!-- Left: League Table -->
+                    <div class="lg:col-span-7 bg-slate-950/90 rounded-xl p-3 border border-slate-800 overflow-hidden">
+                        <h4 class="font-bold text-amber-400 text-xs uppercase tracking-wider mb-2 flex items-center justify-between">
+                            <span><i class="fa-solid fa-list-ol"></i> Live League Standings</span>
+                            <span class="text-[10px] text-emerald-400 font-normal">Top 5 -> Champions League</span>
+                        </h4>
+                        <div class="overflow-x-auto max-h-72">
+                            <table class="w-full text-left text-[11px] font-mono">
+                                <thead class="bg-slate-900 text-slate-400 border-b border-slate-800">
+                                    <tr>
+                                        <th class="p-1.5">Pos</th>
+                                        <th class="p-1.5">Club</th>
+                                        <th class="p-1.5 text-center">P</th>
+                                        <th class="p-1.5 text-center">W</th>
+                                        <th class="p-1.5 text-center">D</th>
+                                        <th class="p-1.5 text-center">L</th>
+                                        <th class="p-1.5 text-center">GD</th>
+                                        <th class="p-1.5 text-right">Pts</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leagueTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Right: Match Feed Commentary Log -->
+                    <div class="lg:col-span-5 bg-slate-950/90 rounded-xl p-3 border border-slate-800 flex flex-col justify-between h-72">
+                        <h4 class="font-bold text-sky-400 text-xs uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                            <i class="fa-solid fa-bullhorn"></i> Match Feed & Commentary
+                        </h4>
+                        <div id="matchLogContainer" class="flex-1 overflow-y-auto space-y-2 text-xs font-mono pr-1">
+                            <div class="text-slate-500 italic text-center py-16">Assemble 11 players on the pitch to start playing!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 6: UEFA CHAMPIONS LEAGUE (UCL) KNOCKOUT SIMULATOR -->
+        <section id="viewUCL" class="hidden flex-col gap-4">
+            <div class="glass-card p-5 rounded-2xl border-2 border-blue-600/80 bg-gradient-to-br from-blue-950 via-slate-950 to-indigo-950 flex flex-col gap-4 shadow-2xl">
+                
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-blue-800/80 pb-3 gap-3">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-star text-yellow-400 text-xl animate-spin"></i>
+                            <h2 class="text-2xl font-black text-blue-300 font-display tracking-wide">UEFA CHAMPIONS LEAGUE</h2>
+                        </div>
+                        <p class="text-xs text-blue-200">Exclusive Tournament for Top 5 Domestic League Finishers. Hard AI Europe Giants!</p>
+                    </div>
+
+                    <div id="uclStageDisplay" class="px-4 py-1.5 rounded-xl bg-blue-900 border border-blue-400 font-mono font-black text-amber-300 text-xs">
+                        STAGE: ROUND OF 16
+                    </div>
+                </div>
+
+                <!-- UCL Tournament Status Header -->
+                <div id="uclLockedNotice" class="p-8 text-center glass-card border border-blue-500/30 rounded-2xl space-y-3">
+                    <div class="w-16 h-16 rounded-full bg-blue-900/80 border-2 border-amber-400 flex items-center justify-center text-2xl text-amber-400 mx-auto">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-white">Champions League Qualification Required!</h3>
+                    <p class="text-xs text-slate-300 max-w-md mx-auto">
+                        To play in the UEFA Champions League, finish in the <strong class="text-amber-400">TOP 5</strong> of your domestic league campaign (Premier League, LaLiga, Bundesliga, Serie A, or Ligue 1).
+                    </p>
+                    <button onclick="document.getElementById('tabSeason').click()" class="px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-black text-xs uppercase">
+                        Go To League Campaign
+                    </button>
+                </div>
+
+                <!-- UCL Active Bracket & Match Commentary Board -->
+                <div id="uclActiveArea" class="hidden flex-col gap-4">
+                    
+                    <!-- Match Commentary Live Board -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                        <!-- Left Match Scoreboard & Play Button -->
+                        <div class="lg:col-span-5 glass-card p-4 rounded-xl border border-blue-700/60 flex flex-col justify-between items-center text-center">
+                            <span class="text-[10px] font-mono text-blue-300 font-bold uppercase tracking-widest">NEXT UCL KNOCKOUT FIXTURE</span>
+                            
+                            <div class="flex items-center justify-around w-full my-4">
+                                <div class="flex flex-col items-center gap-1 w-2/5">
+                                    <div class="w-12 h-12 rounded-xl bg-blue-900/80 border border-blue-400 flex items-center justify-center font-black text-white text-base">
+                                        <i class="fa-solid fa-shirt text-amber-400"></i>
+                                    </div>
+                                    <span id="uclHomeName" class="font-extrabold text-xs text-white truncate w-full">MY SQUAD</span>
+                                </div>
+
+                                <div class="font-mono text-2xl font-black text-amber-400">
+                                    <span id="uclHomeScore">0</span> - <span id="uclAwayScore">0</span>
+                                </div>
+
+                                <div class="flex flex-col items-center gap-1 w-2/5">
+                                    <div class="w-12 h-12 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center font-black text-white text-base">
+                                        <i class="fa-solid fa-shield-halved text-sky-400"></i>
+                                    </div>
+                                    <span id="uclAwayName" class="font-extrabold text-xs text-white truncate w-full">REAL MADRID</span>
+                                </div>
+                            </div>
+
+                            <button id="btnPlayUCLMatch" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs uppercase tracking-wider shadow-xl transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-play"></i> Simulate UCL Match Live
+                            </button>
+                        </div>
+
+                        <!-- Right Play-by-Play Live Commentary Board -->
+                        <div class="lg:col-span-7 glass-card p-4 rounded-xl border border-blue-700/60 flex flex-col justify-between h-72">
+                            <div class="flex items-center justify-between border-b border-blue-800/80 pb-2">
+                                <h4 class="font-black text-amber-400 text-xs uppercase tracking-wider flex items-center gap-2">
+                                    <i class="fa-solid fa-headset text-blue-400"></i> Live Match Commentary Log
+                                </h4>
+                                <span id="uclMatchMinute" class="font-mono text-xs text-emerald-400 font-bold">0'</span>
+                            </div>
+
+                            <div id="uclCommentaryLog" class="flex-1 overflow-y-auto space-y-2 text-xs font-mono py-2 pr-1">
+                                <div class="text-slate-400 italic text-center py-16">Click "Simulate UCL Match Live" to start commentary feed!</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Knockout Bracket Summary -->
+                    <div class="glass-card p-3 rounded-xl border border-blue-800/60">
+                        <h4 class="font-bold text-xs text-blue-300 uppercase mb-2">UCL Knockout Bracket Status</h4>
+                        <div id="uclBracketList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs font-mono">
+                            <!-- Bracket items populate dynamically -->
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PACK REVEAL MODAL -->
+    <div id="packModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-2xl z-50 flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none">
+        <div class="max-w-3xl w-full flex flex-col items-center justify-center text-center relative">
+            <div id="packTearEffect" class="w-48 h-64 bg-gradient-to-b from-amber-500 to-yellow-700 rounded-2xl border-4 border-yellow-300 flex flex-col items-center justify-center shadow-2xl mb-4">
+                <span class="text-xs font-black bg-black/60 text-amber-300 px-2 py-0.5 rounded-full mb-2">3 PLAYERS INSIDE</span>
+                <i class="fa-solid fa-box-open text-6xl text-slate-950 animate-bounce"></i>
+            </div>
+
+            <div id="walkoutBanner" class="hidden font-display text-4xl sm:text-6xl font-black text-amber-400 tracking-wider animate-pulse mb-2">
+                WALKOUT REVEAL!
+            </div>
+
+            <p class="text-amber-300 text-xs font-bold font-mono uppercase mb-2">You pulled 3 New Players:</p>
+            <div id="revealedCardsGrid" class="flex flex-wrap justify-center gap-3 sm:gap-4 my-4 min-h-[200px]"></div>
+
+            <button id="btnClosePack" class="mt-4 px-8 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm uppercase tracking-wider shadow-2xl transition">
+                Collect All 3 & Send to Club
+            </button>
+        </div>
+    </div>
+
+    <!-- SLOT SELECTION / SWAP PLAYER MODAL -->
+    <div id="swapModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none">
+        <div class="glass-card max-w-lg w-full p-5 rounded-2xl border border-slate-700 shadow-2xl relative flex flex-col gap-3">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 id="swapModalTitle" class="font-black text-amber-400 text-base">Assign Player to Position</h3>
+                <button id="btnCloseSwap" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div id="swapEligibleGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2 overflow-y-auto max-h-[320px] p-1"></div>
+
+            <div class="flex justify-between items-center pt-2 border-t border-slate-800">
+                <button id="btnRemoveFromPitch" class="px-3 py-1.5 rounded-lg bg-red-950 text-red-300 border border-red-800/60 font-bold text-xs">
+                    Clear Position
+                </button>
+                <span class="text-[11px] text-slate-400 italic">Select player to assign</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- END OF SEASON COMPREHENSIVE RESULT MODAL -->
+    <div id="endSeasonModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-2xl z-50 flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none">
+        <div class="glass-card max-w-xl w-full p-6 rounded-2xl border-2 border-amber-500/60 shadow-2xl relative flex flex-col gap-4 text-center">
+            
+            <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 text-slate-950 flex items-center justify-center text-3xl mx-auto shadow-lg shadow-amber-500/30">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+
+            <div>
+                <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">DOMESTIC CAMPAIGN COMPLETE</span>
+                <h2 id="endSeasonTitle" class="text-3xl font-black text-white font-display">SEASON SUMMARY</h2>
+            </div>
+
+            <!-- Stats Overview Grid -->
+            <div class="grid grid-cols-3 gap-2 bg-slate-900/80 p-3 rounded-xl border border-slate-800 font-mono">
+                <div>
+                    <span class="text-[10px] text-slate-400 block">FINAL POSITION</span>
+                    <span id="endPosText" class="text-xl font-extrabold text-amber-400">1st</span>
+                </div>
+                <div>
+                    <span class="text-[10px] text-slate-400 block">TOTAL POINTS</span>
+                    <span id="endPtsText" class="text-xl font-extrabold text-white">92 pts</span>
+                </div>
+                <div>
+                    <span class="text-[10px] text-slate-400 block">PRIZE MONEY</span>
+                    <span id="endPrizeText" class="text-xl font-extrabold text-emerald-400">$10,000</span>
+                </div>
+            </div>
+
+            <!-- UCL Qualification Banner -->
+            <div id="uclQualifyBanner" class="p-3 rounded-xl bg-blue-950/90 border border-blue-500/60 text-blue-200 text-xs font-bold flex items-center justify-center gap-2">
+                <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+                <span>QUALIFIED FOR UEFA CHAMPIONS LEAGUE (Top 5 Finish!)</span>
+            </div>
+
+            <div class="flex items-center justify-center gap-3 pt-2">
+                <button id="btnProceedToUCL" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-xs uppercase tracking-wider transition shadow-lg">
+                    <i class="fa-solid fa-star text-amber-400"></i> Enter Champions League
+                </button>
+                <button id="btnNewSeason" class="px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg">
+                    Next Season
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM DIALOG NOTIFICATION MODAL -->
+    <div id="customDialogModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none">
+        <div class="glass-card max-w-sm w-full p-5 rounded-2xl border border-slate-700 text-center flex flex-col gap-3 shadow-2xl">
+            <div class="w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 border border-amber-400 flex items-center justify-center text-xl mx-auto">
+                <i id="dialogIcon" class="fa-solid fa-circle-info"></i>
+            </div>
+            <h3 id="dialogTitle" class="font-extrabold text-white text-base">Notification</h3>
+            <p id="dialogMessage" class="text-xs text-slate-300 leading-relaxed"></p>
+            <button id="btnDialogOk" class="w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================================================
+           1. MASTER DATABASE: OVER 110 REAL PLAYERS (GOATS, ELITES, LEAGUE STARS)
+           ========================================================================== */
+        const MASTER_PLAYERS_DATABASE = [
+            // --- GOAT ICONS (96 - 99) ---
+            { id: 'messi_11', name: 'L. Messi', pos: 'RW', rating: 99, club: 'FC Barcelona', pac: 96, sho: 98, pas: 95, dri: 99, def: 44, phy: 78, tier: 'goat', value: 3500 },
+            { id: 'cr7_17', name: 'C. Ronaldo', pos: 'LW', rating: 99, club: 'Real Madrid', pac: 95, sho: 99, pas: 86, dri: 94, def: 46, phy: 90, tier: 'goat', value: 3500 },
+            { id: 'pele_70', name: 'Pelé', pos: 'ST', rating: 98, club: 'Brazil', pac: 95, sho: 96, pas: 93, dri: 96, def: 50, phy: 80, tier: 'goat', value: 3200 },
+            { id: 'maradona_86', name: 'D. Maradona', pos: 'CAM', rating: 98, club: 'Argentina', pac: 92, sho: 93, pas: 95, dri: 98, def: 42, phy: 78, tier: 'goat', value: 3200 },
+            { id: 'r9_02', name: 'Ronaldo Nazário', pos: 'ST', rating: 97, club: 'Brazil', pac: 97, sho: 95, pas: 81, dri: 95, def: 40, phy: 84, tier: 'goat', value: 3000 },
+            { id: 'zidane_98', name: 'Z. Zidane', pos: 'CAM', rating: 97, club: 'France', pac: 84, sho: 89, pas: 96, dri: 95, def: 75, phy: 86, tier: 'goat', value: 3000 },
+            { id: 'maldini_07', name: 'P. Maldini', pos: 'CB', rating: 97, club: 'AC Milan', pac: 88, sho: 58, pas: 78, dri: 80, def: 98, phy: 88, tier: 'goat', value: 2900 },
+            { id: 'henry_04', name: 'T. Henry', pos: 'ST', rating: 97, club: 'Arsenal', pac: 97, sho: 95, pas: 89, dri: 94, def: 43, phy: 83, tier: 'goat', value: 2900 },
+            { id: 'cruyff_74', name: 'J. Cruyff', pos: 'CAM', rating: 96, club: 'Netherlands', pac: 91, sho: 92, pas: 93, dri: 96, def: 42, phy: 75, tier: 'goat', value: 2800 },
+            { id: 'ronaldinho_05', name: 'Ronaldinho', pos: 'LW', rating: 96, club: 'FC Barcelona', pac: 92, sho: 90, pas: 91, dri: 97, def: 38, phy: 79, tier: 'goat', value: 2800 },
+            { id: 'buffon_06', name: 'G. Buffon', pos: 'GK', rating: 96, club: 'Juventus', pac: 94, sho: 92, pas: 88, dri: 95, def: 52, phy: 90, tier: 'goat', value: 2700 },
+
+            // --- MODERN SUPERSTARS (90 - 95 ELITE) ---
+            { id: 'mbappe_24', name: 'K. Mbappé', pos: 'ST', rating: 94, club: 'Real Madrid', pac: 97, sho: 91, pas: 82, dri: 93, def: 36, phy: 78, tier: 'gold-rare', value: 2200 },
+            { id: 'haaland_24', name: 'E. Haaland', pos: 'ST', rating: 93, club: 'Man City', pac: 89, sho: 93, pas: 68, dri: 80, def: 45, phy: 88, tier: 'gold-rare', value: 2000 },
+            { id: 'bellingham_24', name: 'J. Bellingham', pos: 'CM', rating: 92, club: 'Real Madrid', pac: 80, sho: 84, pas: 85, dri: 88, def: 80, phy: 85, tier: 'gold-rare', value: 1900 },
+            { id: 'vinicius_24', name: 'Vinícius Jr.', pos: 'LW', rating: 92, club: 'Real Madrid', pac: 96, sho: 84, pas: 81, dri: 92, def: 31, phy: 69, tier: 'gold-rare', value: 1900 },
+            { id: 'debruyne_24', name: 'K. De Bruyne', pos: 'CM', rating: 92, club: 'Man City', pac: 72, sho: 88, pas: 94, dri: 87, def: 65, phy: 78, tier: 'gold-rare', value: 1800 },
+            { id: 'rodri_24', name: 'Rodri', pos: 'CDM', rating: 92, club: 'Man City', pac: 61, sho: 76, pas: 86, dri: 81, def: 88, phy: 86, tier: 'gold-rare', value: 1800 },
+            { id: 'kane_24', name: 'H. Kane', pos: 'ST', rating: 91, club: 'Bayern Munich', pac: 69, sho: 93, pas: 84, dri: 83, def: 49, phy: 83, tier: 'gold-rare', value: 1700 },
+            { id: 'salah_24', name: 'M. Salah', pos: 'RW', rating: 91, club: 'Liverpool', pac: 89, sho: 88, pas: 82, dri: 88, def: 45, phy: 76, tier: 'gold-rare', value: 1700 },
+            { id: 'yamal_24', name: 'Lamine Yamal', pos: 'RW', rating: 90, club: 'FC Barcelona', pac: 91, sho: 82, pas: 85, dri: 92, def: 35, phy: 65, tier: 'gold-rare', value: 1600 },
+            { id: 'courtois_24', name: 'T. Courtois', pos: 'GK', rating: 90, club: 'Real Madrid', pac: 85, sho: 89, pas: 76, dri: 90, def: 48, phy: 91, tier: 'gold-rare', value: 1500 },
+            { id: 'vandijk_24', name: 'V. van Dijk', pos: 'CB', rating: 90, club: 'Liverpool', pac: 78, sho: 60, pas: 71, dri: 72, def: 91, phy: 86, tier: 'gold-rare', value: 1500 },
+
+            // --- ADDITIONAL 50+ LEAGUE PLAYERS (82 - 89 GOLD RARE) ---
+            { id: 'wirtz_24', name: 'F. Wirtz', pos: 'CAM', rating: 89, club: 'Bayer Leverkusen', pac: 82, sho: 81, pas: 88, dri: 90, def: 52, phy: 68, tier: 'gold-rare', value: 1400 },
+            { id: 'musiala_24', name: 'J. Musiala', pos: 'CAM', rating: 89, club: 'Bayern Munich', pac: 85, sho: 81, pas: 83, dri: 91, def: 63, phy: 65, tier: 'gold-rare', value: 1400 },
+            { id: 'saka_24', name: 'B. Saka', pos: 'RW', rating: 88, club: 'Arsenal', pac: 86, sho: 82, pas: 83, dri: 87, def: 62, phy: 76, tier: 'gold-rare', value: 1300 },
+            { id: 'saliba_24', name: 'W. Saliba', pos: 'CB', rating: 88, club: 'Arsenal', pac: 82, sho: 45, pas: 72, dri: 76, def: 88, phy: 83, tier: 'gold-rare', value: 1300 },
+            { id: 'rubendias_24', name: 'Rúben Dias', pos: 'CB', rating: 88, club: 'Man City', pac: 63, sho: 39, pas: 68, dri: 69, def: 89, phy: 87, tier: 'gold-rare', value: 1200 },
+            { id: 'valverde_24', name: 'F. Valverde', pos: 'CM', rating: 88, club: 'Real Madrid', pac: 88, sho: 82, pas: 84, dri: 84, def: 80, phy: 84, tier: 'gold-rare', value: 1300 },
+            { id: 'lautaro_24', name: 'L. Martínez', pos: 'ST', rating: 88, club: 'Inter Milan', pac: 81, sho: 87, pas: 74, dri: 84, def: 48, phy: 85, tier: 'gold-rare', value: 1200 },
+            { id: 'barella_24', name: 'N. Barella', pos: 'CM', rating: 87, club: 'Inter Milan', pac: 78, sho: 76, pas: 84, dri: 85, def: 78, phy: 81, tier: 'gold-rare', value: 1100 },
+            { id: 'palmer_24', name: 'C. Palmer', pos: 'CAM', rating: 87, club: 'Chelsea', pac: 81, sho: 84, pas: 85, dri: 86, def: 55, phy: 70, tier: 'gold-rare', value: 1100 },
+            { id: 'rice_24', name: 'D. Rice', pos: 'CDM', rating: 87, club: 'Arsenal', pac: 74, sho: 68, pas: 80, dri: 80, def: 86, phy: 85, tier: 'gold-rare', value: 1100 },
+            { id: 'son_24', name: 'H.M. Son', pos: 'LW', rating: 87, club: 'Tottenham', pac: 87, sho: 88, pas: 80, dri: 84, def: 42, phy: 70, tier: 'gold-rare', value: 1100 },
+            { id: 'griezmann_24', name: 'A. Griezmann', pos: 'CAM', rating: 87, club: 'Atlético Madrid', pac: 78, sho: 87, pas: 86, dri: 87, def: 58, phy: 72, tier: 'gold-rare', value: 1100 },
+            { id: 'pedri_24', name: 'Pedri', pos: 'CM', rating: 86, club: 'FC Barcelona', pac: 78, sho: 68, pas: 85, dri: 88, def: 68, phy: 64, tier: 'gold-rare', value: 1000 },
+            { id: 'kvaratskhelia_24', name: 'K. Kvaratskhelia', pos: 'LW', rating: 86, club: 'Napoli', pac: 84, sho: 81, pas: 81, dri: 88, def: 40, phy: 74, tier: 'gold-rare', value: 1000 },
+            { id: 'leao_24', name: 'R. Leão', pos: 'LW', rating: 86, club: 'AC Milan', pac: 93, sho: 80, pas: 76, dri: 87, def: 30, phy: 77, tier: 'gold-rare', value: 1000 },
+            { id: 'theo_24', name: 'T. Hernández', pos: 'LB', rating: 87, club: 'AC Milan', pac: 92, sho: 72, pas: 76, dri: 81, def: 80, phy: 84, tier: 'gold-rare', value: 1100 },
+            { id: 'bastoni_24', name: 'A. Bastoni', pos: 'CB', rating: 87, club: 'Inter Milan', pac: 74, sho: 40, pas: 78, dri: 77, def: 87, phy: 82, tier: 'gold-rare', value: 1100 },
+            { id: 'marquinhos_24', name: 'Marquinhos', pos: 'CB', rating: 87, club: 'PSG', pac: 78, sho: 56, pas: 75, dri: 74, def: 88, phy: 80, tier: 'gold-rare', value: 1100 },
+            { id: 'dembele_24', name: 'O. Dembélé', pos: 'RW', rating: 86, club: 'PSG', pac: 93, sho: 77, pas: 82, dri: 87, def: 36, phy: 58, tier: 'gold-rare', value: 950 },
+            { id: 'donnarumma_24', name: 'G. Donnarumma', pos: 'GK', rating: 88, club: 'PSG', pac: 89, sho: 88, pas: 79, dri: 89, def: 50, phy: 85, tier: 'gold-rare', value: 1200 },
+            { id: 'alisson_24', name: 'Alisson', pos: 'GK', rating: 89, club: 'Liverpool', pac: 86, sho: 85, pas: 85, dri: 89, def: 52, phy: 88, tier: 'gold-rare', value: 1300 },
+            { id: 'ederson_24', name: 'Ederson', pos: 'GK', rating: 88, club: 'Man City', pac: 86, sho: 82, pas: 91, dri: 87, def: 60, phy: 83, tier: 'gold-rare', value: 1150 },
+            { id: 'trent_24', name: 'T. Alexander-Arnold', pos: 'RB', rating: 86, club: 'Liverpool', pac: 76, sho: 71, pas: 90, dri: 80, def: 80, phy: 73, tier: 'gold-rare', value: 950 },
+            { id: 'carvajal_24', name: 'D. Carvajal', pos: 'RB', rating: 86, club: 'Real Madrid', pac: 81, sho: 54, pas: 78, dri: 80, def: 84, phy: 81, tier: 'gold-rare', value: 950 },
+            { id: 'kimmich_24', name: 'J. Kimmich', pos: 'CDM', rating: 86, club: 'Bayern Munich', pac: 68, sho: 72, pas: 88, dri: 82, def: 82, phy: 77, tier: 'gold-rare', value: 950 },
+            { id: 'goretzka_24', name: 'L. Goretzka', pos: 'CM', rating: 85, club: 'Bayern Munich', pac: 78, sho: 81, pas: 81, dri: 81, def: 80, phy: 84, tier: 'gold-rare', value: 850 },
+            { id: 'davies_24', name: 'A. Davies', pos: 'LB', rating: 85, club: 'Bayern Munich', pac: 95, sho: 66, pas: 77, dri: 84, def: 76, phy: 77, tier: 'gold-rare', value: 900 },
+            { id: 'nico_24', name: 'Nico Williams', pos: 'LW', rating: 85, club: 'Athletic Bilbao', pac: 93, sho: 79, pas: 78, dri: 86, def: 38, phy: 68, tier: 'gold-rare', value: 850 },
+            { id: 'rodrygo_24', name: 'Rodrygo', pos: 'RW', rating: 85, club: 'Real Madrid', pac: 88, sho: 82, pas: 80, dri: 87, def: 32, phy: 62, tier: 'gold-rare', value: 850 },
+            { id: 'watkins_24', name: 'O. Watkins', pos: 'ST', rating: 85, club: 'Aston Villa', pac: 86, sho: 84, pas: 75, dri: 81, def: 40, phy: 78, tier: 'gold-rare', value: 800 },
+            { id: 'macallister_24', name: 'A. Mac Allister', pos: 'CM', rating: 85, club: 'Liverpool', pac: 72, sho: 78, pas: 84, dri: 82, def: 77, phy: 76, tier: 'gold-rare', value: 800 },
+            { id: 'alvarez_24', name: 'J. Álvarez', pos: 'ST', rating: 85, club: 'Atlético Madrid', pac: 84, sho: 84, pas: 78, dri: 84, def: 52, phy: 76, tier: 'gold-rare', value: 850 },
+            { id: 'guimaraes_24', name: 'B. Guimarães', pos: 'CM', rating: 85, club: 'Newcastle', pac: 70, sho: 75, pas: 83, dri: 84, def: 80, phy: 84, tier: 'gold-rare', value: 800 },
+            { id: 'bruno_24', name: 'Bruno Fernandes', pos: 'CAM', rating: 87, club: 'Man United', pac: 72, sho: 85, pas: 89, dri: 82, def: 67, phy: 77, tier: 'gold-rare', value: 1100 },
+
+            // --- SILVER PRO & BRONZE TALENTS (68 - 84) ---
+            { id: 'gordon_24', name: 'A. Gordon', pos: 'LW', rating: 82, club: 'Newcastle', pac: 90, sho: 76, pas: 74, dri: 82, def: 42, phy: 68, tier: 'silver', value: 400 },
+            { id: 'mainoo_24', name: 'K. Mainoo', pos: 'CM', rating: 81, club: 'Man United', pac: 75, sho: 70, pas: 79, dri: 84, def: 76, phy: 74, tier: 'silver', value: 350 },
+            { id: 'echeverri_24', name: 'C. Echeverri', pos: 'CAM', rating: 78, club: 'Man City', pac: 82, sho: 72, pas: 76, dri: 81, def: 38, phy: 58, tier: 'silver', value: 250 },
+            { id: 'endrick_24', name: 'Endrick', pos: 'ST', rating: 80, club: 'Real Madrid', pac: 89, sho: 80, pas: 68, dri: 81, def: 35, phy: 78, tier: 'silver', value: 300 },
+            { id: 'cubarsi_24', name: 'P. Cubarsí', pos: 'CB', rating: 81, club: 'FC Barcelona', pac: 72, sho: 38, pas: 78, dri: 74, def: 82, phy: 75, tier: 'silver', value: 350 },
+            { id: 'quansah_24', name: 'J. Quansah', pos: 'CB', rating: 77, club: 'Liverpool', pac: 74, sho: 35, pas: 68, dri: 69, def: 78, phy: 79, tier: 'bronze', value: 150 },
+            { id: 'wharton_24', name: 'A. Wharton', pos: 'CDM', rating: 78, club: 'Crystal Palace', pac: 68, sho: 64, pas: 78, dri: 76, def: 77, phy: 74, tier: 'silver', value: 200 },
+            { id: 'tel_24', name: 'M. Tel', pos: 'ST', rating: 78, club: 'Bayern Munich', pac: 86, sho: 78, pas: 68, dri: 80, def: 30, phy: 70, tier: 'silver', value: 200 },
+            { id: 'zirkzee_24', name: 'J. Zirkzee', pos: 'ST', rating: 80, club: 'Man United', pac: 78, sho: 77, pas: 75, dri: 82, def: 35, phy: 80, tier: 'silver', value: 280 },
+            { id: 'savinho_24', name: 'Sávio', pos: 'RW', rating: 82, club: 'Man City', pac: 88, sho: 74, pas: 77, dri: 85, def: 32, phy: 58, tier: 'silver', value: 380 },
+            { id: 'mcnamara_24', name: 'L. McNamara', pos: 'LB', rating: 72, club: 'Celtic', pac: 78, sho: 50, pas: 62, dri: 65, def: 70, phy: 68, tier: 'bronze', value: 80 },
+            { id: 'obrien_24', name: 'J. O\'Brien', pos: 'RB', rating: 70, club: 'Everton', pac: 76, sho: 45, pas: 60, dri: 63, def: 71, phy: 70, tier: 'bronze', value: 60 },
+            { id: 'schmidt_24', name: 'K. Schmidt', pos: 'GK', rating: 71, club: 'Augsburg', pac: 70, sho: 70, pas: 68, dri: 72, def: 45, phy: 72, tier: 'bronze', value: 70 }
+        ];
+
+        /* ==========================================================================
+           2. DOMESTIC LEAGUES & UCL PARTICIPANTS DEFINITION
+           ========================================================================== */
+        const LEAGUES_DATA = {
+            epl: {
+                name: "Premier League",
+                teams: [
+                    "Manchester City", "Arsenal", "Liverpool", "Aston Villa", "Tottenham", 
+                    "Chelsea", "Newcastle", "Manchester United", "West Ham", "Brighton",
+                    "Bournemouth", "Crystal Palace", "Wolves", "Fulham", "Everton",
+                    "Brentford", "Nottingham Forest", "Leicester City", "Ipswich Town", "Southampton"
+                ]
+            },
+            laliga: {
+                name: "LaLiga",
+                teams: [
+                    "Real Madrid", "FC Barcelona", "Girona", "Atlético Madrid", "Athletic Bilbao",
+                    "Real Sociedad", "Real Betis", "Villarreal", "Valencia", "Sevilla",
+                    "Osasuna", "Getafe", "Celta Vigo", "Rayo Vallecano", "Mallorca",
+                    "Las Palmas", "Espanyol", "Leganés", "Real Valladolid", "Alavés"
+                ]
+            },
+            bundesliga: {
+                name: "Bundesliga",
+                teams: [
+                    "Bayer Leverkusen", "Bayern Munich", "VfB Stuttgart", "RB Leipzig", "Borussia Dortmund",
+                    "Eintracht Frankfurt", "Hoffenheim", "Heidenheim", "Werder Bremen", "SC Freiburg",
+                    "FC Augsburg", "VfL Wolfsburg", "FSV Mainz", "Borussia M'gladbach", "Union Berlin",
+                    "VfL Bochum", "FC St. Pauli", "Holstein Kiel"
+                ]
+            },
+            seriea: {
+                name: "Serie A (Liga Italia)",
+                teams: [
+                    "Inter Milan", "AC Milan", "Juventus", "Atalanta", "Bologna",
+                    "AS Roma", "Lazio", "Fiorentina", "Torino", "Napoli",
+                    "Genoa", "Monza", "Hellas Verona", "Cagliari", "Lecce",
+                    "Parma", "Como", "Venezia", "Empoli", "Udinese"
+                ]
+            },
+            ligue1: {
+                name: "Ligue 1",
+                teams: [
+                    "Paris Saint-Germain", "AS Monaco", "Brest", "Lille", "OGC Nice",
+                    "Olympique Lyonnais", "RC Lens", "Olympique de Marseille", "Stade Reims", "Rennes",
+                    "Toulouse", "Montpellier", "RC Strasbourg", "Nantes", "Le Havre", "AJ Auxerre", "Angers", "AS Saint-Étienne"
+                ]
+            }
+        };
+
+        const UCL_ELITE_TEAMS = [
+            "Real Madrid", "Manchester City", "Bayern Munich", "Paris Saint-Germain", 
+            "Inter Milan", "FC Barcelona", "Arsenal", "Bayer Leverkusen",
+            "Atlético Madrid", "Juventus", "Borussia Dortmund", "AC Milan",
+            "Liverpool", "Aston Villa", "Atalanta", "Sporting CP"
+        ];
+
+        /* ==========================================================================
+           3. GAME STATE MANAGEMENT
+           ========================================================================== */
+        let state = {
+            cash: 1000,
+            autoSellDuplicates: false,
+            soundEnabled: true,
+            pitchTheme: 'pitch-vibrant',
+            selectedFormation: '4-3-3',
+            activeLeagueKey: 'epl',
+            clubInventory: [],
+            pitchSquad: {}, // posKey -> playerObj
+            marketListings: [],
+            loanListings: [],
+            leagueSeason: {
+                currentFixture: 0,
+                totalFixtures: 38,
+                table: [],
+                logs: [],
+                record: { w: 0, d: 0, l: 0 },
+                finished: false
+            },
+            ucl: {
+                qualified: false,
+                currentStage: 'Round of 16', // 'Round of 16', 'Quarter-Finals', 'Semi-Finals', 'Final', 'Winner'
+                activeOpponent: null,
+                matchLog: [],
+                bracket: [],
+                finished: false
+            }
+        };
+
+        /* Formations mapping */
+        const FORMATIONS = {
+            '4-3-3': [
+                { key: 'LW', label: 'LW', top: '15%', left: '18%' },
+                { key: 'ST', label: 'ST', top: '10%', left: '50%' },
+                { key: 'RW', label: 'RW', top: '15%', left: '82%' },
+                { key: 'LCM', label: 'CM', top: '42%', left: '26%' },
+                { key: 'CM', label: 'CAM', top: '35%', left: '50%' },
+                { key: 'RCM', label: 'CM', top: '42%', left: '74%' },
+                { key: 'LB', label: 'LB', top: '70%', left: '15%' },
+                { key: 'LCB', label: 'CB', top: '75%', left: '38%' },
+                { key: 'RCB', label: 'CB', top: '75%', left: '62%' },
+                { key: 'RB', label: 'RB', top: '70%', left: '85%' },
+                { key: 'GK', label: 'GK', top: '90%', left: '50%' }
+            ],
+            '4-4-2': [
+                { key: 'LS', label: 'ST', top: '12%', left: '35%' },
+                { key: 'RS', label: 'ST', top: '12%', left: '65%' },
+                { key: 'LM', label: 'LM', top: '40%', left: '15%' },
+                { key: 'LCM', label: 'CM', top: '42%', left: '38%' },
+                { key: 'RCM', label: 'CM', top: '42%', left: '62%' },
+                { key: 'RM', label: 'RM', top: '40%', left: '85%' },
+                { key: 'LB', label: 'LB', top: '70%', left: '15%' },
+                { key: 'LCB', label: 'CB', top: '75%', left: '38%' },
+                { key: 'RCB', label: 'CB', top: '75%', left: '62%' },
+                { key: 'RB', label: 'RB', top: '70%', left: '85%' },
+                { key: 'GK', label: 'GK', top: '90%', left: '50%' }
+            ],
+            '4-2-3-1': [
+                { key: 'ST', label: 'ST', top: '10%', left: '50%' },
+                { key: 'LAM', label: 'LAM', top: '28%', left: '22%' },
+                { key: 'CAM', label: 'CAM', top: '25%', left: '50%' },
+                { key: 'RAM', label: 'RAM', top: '28%', left: '78%' },
+                { key: 'LDM', label: 'CDM', top: '48%', left: '35%' },
+                { key: 'RDM', label: 'CDM', top: '48%', left: '65%' },
+                { key: 'LB', label: 'LB', top: '70%', left: '15%' },
+                { key: 'LCB', label: 'CB', top: '75%', left: '38%' },
+                { key: 'RCB', label: 'CB', top: '75%', left: '62%' },
+                { key: 'RB', label: 'RB', top: '70%', left: '85%' },
+                { key: 'GK', label: 'GK', top: '90%', left: '50%' }
+            ],
+            '3-5-2': [
+                { key: 'LS', label: 'ST', top: '12%', left: '35%' },
+                { key: 'RS', label: 'ST', top: '12%', left: '65%' },
+                { key: 'CAM', label: 'CAM', top: '30%', left: '50%' },
+                { key: 'LWM', label: 'LM', top: '42%', left: '12%' },
+                { key: 'LCM', label: 'CM', top: '48%', left: '36%' },
+                { key: 'RCM', label: 'CM', top: '48%', left: '64%' },
+                { key: 'RWM', label: 'RM', top: '42%', left: '88%' },
+                { key: 'LCB', label: 'CB', top: '75%', left: '25%' },
+                { key: 'CCB', label: 'CB', top: '78%', left: '50%' },
+                { key: 'RCB', label: 'CB', top: '75%', left: '75%' },
+                { key: 'GK', label: 'GK', top: '90%', left: '50%' }
+            ]
+        };
+
+        /* Web Audio Sound Synthesizer */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSoundEffect(type) {
+            if (!state.soundEnabled || !audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.05);
+                } else if (type === 'coin') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(987.77, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + 0.08);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.25);
+                } else if (type === 'pack') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.4);
+                    gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.45);
+                } else if (type === 'goal') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.5);
+                }
+            } catch(e) {}
+        }
+
+        /* UI Dialog Modal */
+        function showCustomDialog(title, message, iconClass = 'fa-circle-info') {
+            document.getElementById('dialogTitle').innerText = title;
+            document.getElementById('dialogMessage').innerText = message;
+            document.getElementById('dialogIcon').className = `fa-solid ${iconClass}`;
+            const modal = document.getElementById('customDialogModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        document.getElementById('btnDialogOk').addEventListener('click', () => {
+            document.getElementById('customDialogModal').classList.add('opacity-0', 'pointer-events-none');
+        });
+
+        /* Starter Pack Initialization */
+        function initStarterTeam() {
+            // Assign starter squad with unique real players
+            const starterIDs = ['mainoo_24', 'quansah_24', 'echeverri_24', 'gordon_24', 'schmidt_24', 'tel_24', 'mcnamara_24', 'obrien_24'];
+            starterIDs.forEach(id => {
+                const found = MASTER_PLAYERS_DATABASE.find(p => p.id === id);
+                if (found) {
+                    state.clubInventory.push({ ...found, instanceId: crypto.randomUUID() });
+                }
+            });
+            updateHUD();
+            initLeagueSeason();
+            renderPitch();
+            renderBench();
+            refreshMarketListings();
+        }
+
+        function updateHUD() {
+            document.getElementById('cashDisplay').innerText = `$${state.cash.toLocaleString()}`;
+            document.getElementById('clubCountBadge').innerText = state.clubInventory.length;
+            document.getElementById('activeLeagueName').innerText = LEAGUES_DATA[state.activeLeagueKey].name;
+            document.getElementById('autoSellStateText').innerText = state.autoSellDuplicates ? 'ON' : 'OFF';
+            document.getElementById('autoSellStateText').className = state.autoSellDuplicates ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold';
+        }
+
+        /* Check if a player instance or template ID is already on pitch */
+        function isPlayerOnPitch(playerObj) {
+            return Object.values(state.pitchSquad).some(p => p && (p.id === playerObj.id || p.instanceId === playerObj.instanceId));
+        }
+
+        /* Remove duplicate instances on pitch */
+        function assignPlayerToPitch(posKey, playerObj) {
+            // STRICT DUPLICATE PREVENTION: Check if player is already on pitch
+            const existingPosKey = Object.keys(state.pitchSquad).find(k => {
+                const p = state.pitchSquad[k];
+                return p && (p.id === playerObj.id || p.instanceId === playerObj.instanceId);
+            });
+
+            if (existingPosKey) {
+                if (existingPosKey === posKey) {
+                    // Already in this spot
+                    return;
+                }
+                // Clear old position to prevent pitch duplicate
+                delete state.pitchSquad[existingPosKey];
+            }
+
+            state.pitchSquad[posKey] = playerObj;
+            playSoundEffect('click');
+            renderPitch();
+            renderBench();
+            calculateSquadStats();
+        }
+
+        function clearPositionFromPitch(posKey) {
+            delete state.pitchSquad[posKey];
+            playSoundEffect('click');
+            renderPitch();
+            renderBench();
+            calculateSquadStats();
+        }
+
+        /* Calculate Squad Overall & Chemistry */
+        function calculateSquadStats() {
+            const currentSlots = FORMATIONS[state.selectedFormation];
+            const filledSlots = currentSlots.filter(slot => state.pitchSquad[slot.key]);
+            
+            if (filledSlots.length === 0) {
+                document.getElementById('squadRatingText').innerText = '0';
+                document.getElementById('squadChemText').innerText = '0%';
+                document.getElementById('btnStartSimulation').disabled = true;
+                document.getElementById('btnFastSim').disabled = true;
+                return;
+            }
+
+            let totalRating = 0;
+            let chemScore = 0;
+            let clubCounts = {};
+
+            filledSlots.forEach(slot => {
+                const player = state.pitchSquad[slot.key];
+                totalRating += player.rating;
+
+                // Position match bonus
+                if (player.pos === slot.label) chemScore += 6;
+                else chemScore += 3;
+
+                // Club link bonus
+                clubCounts[player.club] = (clubCounts[player.club] || 0) + 1;
+            });
+
+            Object.values(clubCounts).forEach(cnt => {
+                if (cnt >= 2) chemScore += (cnt * 4);
+            });
+
+            const avgRating = Math.round(totalRating / currentSlots.length);
+            const finalChem = Math.min(100, Math.round((chemScore / (currentSlots.length * 9)) * 100));
+
+            document.getElementById('squadRatingText').innerText = avgRating;
+            document.getElementById('squadChemText').innerText = `${finalChem}%`;
+
+            const isFullSquad = filledSlots.length === currentSlots.length;
+            document.getElementById('btnStartSimulation').disabled = !isFullSquad;
+            document.getElementById('btnFastSim').disabled = !isFullSquad;
+        }
+
+        /* Render Tactical Pitch Grid */
+        function renderPitch() {
+            const grid = document.getElementById('pitchGrid');
+            grid.innerHTML = '';
+            const currentLayout = FORMATIONS[state.selectedFormation];
+
+            currentLayout.forEach(slot => {
+                const player = state.pitchSquad[slot.key];
+                const slotEl = document.createElement('div');
+                slotEl.className = 'absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer flex flex-col items-center group transition-transform hover:scale-105';
+                slotEl.style.top = slot.top;
+                slotEl.style.left = slot.left;
+
+                if (player) {
+                    slotEl.innerHTML = `
+                        <div class="w-12 h-16 sm:w-16 sm:h-20 fut-card ${player.tier === 'goat' ? 'goat-card' : player.tier === 'ucl' ? 'ucl-card' : player.tier === 'gold-rare' ? 'gold-rare' : player.tier} p-1 flex flex-col justify-between items-center text-center shadow-lg">
+                            <div class="flex justify-between w-full text-[8px] sm:text-[10px] font-black leading-none">
+                                <span class="font-mono text-amber-300">${player.rating}</span>
+                                <span class="uppercase">${player.pos}</span>
+                            </div>
+                            <div class="font-extrabold text-[9px] sm:text-[11px] truncate w-full my-0.5 leading-tight">${player.name.split(' ').pop()}</div>
+                            <div class="text-[7px] sm:text-[8px] opacity-80 truncate w-full font-mono">${player.club}</div>
+                        </div>
+                    `;
+                    slotEl.onclick = () => openSwapModal(slot.key, slot.label);
+                } else {
+                    slotEl.innerHTML = `
+                        <div class="w-12 h-16 sm:w-16 sm:h-20 rounded-xl border-2 border-dashed border-white/60 bg-black/30 backdrop-blur-sm slot-pulse flex flex-col items-center justify-center text-white/80 hover:border-amber-400 hover:text-amber-400">
+                            <i class="fa-solid fa-plus text-xs sm:text-sm"></i>
+                            <span class="text-[9px] font-black font-mono mt-0.5">${slot.label}</span>
+                        </div>
+                    `;
+                    slotEl.onclick = () => openSwapModal(slot.key, slot.label);
+                }
+                grid.appendChild(slotEl);
+            });
+        }
+
+        /* Render Bench & Reserves Panel */
+        function renderBench() {
+            const container = document.getElementById('benchContainer');
+            container.innerHTML = '';
+            const searchVal = document.getElementById('benchSearch').value.toLowerCase();
+
+            // Filter out players ALREADY on pitch
+            const availableBench = state.clubInventory.filter(p => !isPlayerOnPitch(p));
+            const filtered = availableBench.filter(p => p.name.toLowerCase().includes(searchVal) || p.pos.toLowerCase().includes(searchVal));
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center text-slate-500 text-xs py-8">No unassigned players found in club.</div>`;
+                return;
+            }
+
+            filtered.forEach(player => {
+                const card = document.createElement('div');
+                card.className = `fut-card ${player.tier === 'goat' ? 'goat-card' : player.tier === 'gold-rare' ? 'gold-rare' : player.tier} p-2 flex flex-col justify-between items-center text-center cursor-pointer hover:scale-105 transition`;
+                card.innerHTML = `
+                    <div class="flex justify-between w-full text-[9px] font-black">
+                        <span class="text-amber-300 font-mono">${player.rating}</span>
+                        <span class="uppercase">${player.pos}</span>
+                    </div>
+                    <div class="font-bold text-[10px] truncate w-full my-1">${player.name}</div>
+                    <span class="text-[8px] opacity-80 font-mono truncate w-full">${player.club}</span>
+                `;
+                card.onclick = () => autoAssignToFirstEmptySlot(player);
+                container.appendChild(card);
+            });
+        }
+
+        function autoAssignToFirstEmptySlot(player) {
+            const currentLayout = FORMATIONS[state.selectedFormation];
+            // Find first empty slot or matching position
+            let emptySlot = currentLayout.find(slot => !state.pitchSquad[slot.key] && slot.label === player.pos);
+            if (!emptySlot) {
+                emptySlot = currentLayout.find(slot => !state.pitchSquad[slot.key]);
+            }
+
+            if (emptySlot) {
+                assignPlayerToPitch(emptySlot.key, player);
+            } else {
+                showCustomDialog('Pitch Full', 'Pitch is full! Tap a position on the pitch to swap players.');
+            }
+        }
+
+        /* Swap Player Modal Logic */
+        let currentSwapPosKey = null;
+
+        function openSwapModal(posKey, posLabel) {
+            currentSwapPosKey = posKey;
+            document.getElementById('swapModalTitle').innerText = `Assign / Swap ${posLabel} Position`;
+            const container = document.getElementById('swapEligibleGrid');
+            container.innerHTML = '';
+
+            state.clubInventory.forEach(player => {
+                const isOnPitch = isPlayerOnPitch(player);
+                const isExactPos = player.pos === posLabel;
+
+                const card = document.createElement('div');
+                card.className = `fut-card ${player.tier === 'goat' ? 'goat-card' : player.tier === 'gold-rare' ? 'gold-rare' : player.tier} p-2 flex flex-col justify-between items-center text-center cursor-pointer ${isOnPitch ? 'opacity-40 border-red-500' : 'hover:scale-105'} transition relative`;
+                card.innerHTML = `
+                    ${isOnPitch ? `<span class="absolute top-1 right-1 bg-red-600 text-white text-[8px] px-1 rounded font-black">ON PITCH</span>` : ''}
+                    <div class="flex justify-between w-full text-[9px] font-black">
+                        <span class="text-amber-300 font-mono">${player.rating}</span>
+                        <span class="uppercase ${isExactPos ? 'text-emerald-400 font-extrabold' : ''}">${player.pos}</span>
+                    </div>
+                    <div class="font-bold text-[10px] truncate w-full my-1">${player.name}</div>
+                    <span class="text-[8px] opacity-80 font-mono truncate w-full">${player.club}</span>
+                `;
+                card.onclick = () => {
+                    assignPlayerToPitch(posKey, player);
+                    closeSwapModal();
+                };
+                container.appendChild(card);
+            });
+
+            const modal = document.getElementById('swapModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeSwapModal() {
+            document.getElementById('swapModal').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        document.getElementById('btnCloseSwap').onclick = closeSwapModal;
+        document.getElementById('btnRemoveFromPitch').onclick = () => {
+            if (currentSwapPosKey) clearPositionFromPitch(currentSwapPosKey);
+            closeSwapModal();
+        };
+
+        /* Auto Fill Best Squad */
+        document.getElementById('btnAutoBestSquad').onclick = () => {
+            state.pitchSquad = {}; // Reset pitch
+            const currentSlots = FORMATIONS[state.selectedFormation];
+            let available = [...state.clubInventory].sort((a, b) => b.rating - a.rating);
+
+            currentSlots.forEach(slot => {
+                // First try exact position match
+                const matchIndex = available.findIndex(p => p.pos === slot.label);
+                if (matchIndex !== -1) {
+                    state.pitchSquad[slot.key] = available[matchIndex];
+                    available.splice(matchIndex, 1);
+                } else if (available.length > 0) {
+                    // Fallback highest rating
+                    state.pitchSquad[slot.key] = available[0];
+                    available.shift();
+                }
+            });
+
+            playSoundEffect('click');
+            renderPitch();
+            renderBench();
+            calculateSquadStats();
+        };
+
+        document.getElementById('btnClearSquad').onclick = () => {
+            state.pitchSquad = {};
+            playSoundEffect('click');
+            renderPitch();
+            renderBench();
+            calculateSquadStats();
+        };
+
+        /* PACK STORE LOGIC */
+        function purchasePack(tier) {
+            const prices = { bronze: 50, silver: 150, gold: 400, elite: 1000, goat: 2500 };
+            const cost = prices[tier];
+
+            if (state.cash < cost) {
+                showCustomDialog('Insufficient Funds', `You need $${cost} to open this pack. Win league matches to earn funds!`, 'fa-sack-xmark');
+                return;
+            }
+
+            state.cash -= cost;
+            updateHUD();
+            playSoundEffect('pack');
+
+            // Generate 3 Players
+            const pulledPlayers = [];
+            for (let i = 0; i < 3; i++) {
+                pulledPlayers.push(generateRandomPlayerForTier(tier));
+            }
+
+            openPackModal(pulledPlayers);
+        }
+
+        function generateRandomPlayerForTier(tier) {
+            let filtered = [];
+            if (tier === 'bronze') filtered = MASTER_PLAYERS_DATABASE.filter(p => p.rating <= 78);
+            else if (tier === 'silver') filtered = MASTER_PLAYERS_DATABASE.filter(p => p.rating >= 76 && p.rating <= 84);
+            else if (tier === 'gold') filtered = MASTER_PLAYERS_DATABASE.filter(p => p.rating >= 82 && p.rating <= 92);
+            else if (tier === 'elite') filtered = MASTER_PLAYERS_DATABASE.filter(p => p.rating >= 87 && p.rating <= 95);
+            else if (tier === 'goat') filtered = MASTER_PLAYERS_DATABASE.filter(p => p.rating >= 96);
+
+            if (!filtered || filtered.length === 0) filtered = MASTER_PLAYERS_DATABASE;
+            const template = filtered[Math.floor(Math.random() * filtered.length)];
+            return { ...template, instanceId: crypto.randomUUID() };
+        }
+
+        function openPackModal(players) {
+            const grid = document.getElementById('revealedCardsGrid');
+            grid.innerHTML = '';
+
+            let hasWalkout = players.some(p => p.rating >= 88);
+            document.getElementById('walkoutBanner').className = hasWalkout ? 'font-display text-4xl sm:text-6xl font-black text-amber-400 tracking-wider animate-pulse mb-2' : 'hidden';
+
+            players.forEach(p => {
+                // Duplicate check for Auto-Sell
+                const isDuplicate = state.clubInventory.some(existing => existing.id === p.id);
+                
+                if (isDuplicate && state.autoSellDuplicates) {
+                    const sellVal = Math.round(p.value * 0.7);
+                    state.cash += sellVal;
+                    const toast = document.createElement('div');
+                    toast.className = 'glass-card p-3 rounded-xl border border-amber-500/50 flex flex-col items-center justify-center text-center text-xs';
+                    toast.innerHTML = `<span class="text-red-400 font-bold">AUTO-SOLD DUP!</span><span class="text-white">${p.name}</span><span class="text-amber-400 font-mono">+$${sellVal}</span>`;
+                    grid.appendChild(toast);
+                } else {
+                    state.clubInventory.push(p);
+                    const card = document.createElement('div');
+                    card.className = `w-28 h-40 sm:w-36 sm:h-52 fut-card ${p.tier === 'goat' ? 'goat-card' : p.tier === 'gold-rare' ? 'gold-rare' : p.tier} p-2 flex flex-col justify-between items-center text-center shadow-2xl animate-bounce`;
+                    card.innerHTML = `
+                        <div class="flex justify-between w-full text-xs font-black">
+                            <span class="text-amber-300 font-mono">${p.rating}</span>
+                            <span class="uppercase">${p.pos}</span>
+                        </div>
+                        <div class="font-black text-xs sm:text-sm truncate w-full my-1">${p.name}</div>
+                        <div class="text-[9px] opacity-80 font-mono truncate w-full">${p.club}</div>
+                        <div class="grid grid-cols-2 gap-1 w-full text-[8px] font-mono border-t border-white/20 pt-1">
+                            <span>PAC: ${p.pac}</span><span>SHO: ${p.sho}</span>
+                            <span>PAS: ${p.pas}</span><span>DRI: ${p.dri}</span>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                }
+            });
+
+            updateHUD();
+            renderBench();
+            renderClubInventory();
+
+            if (hasWalkout) triggerConfetti();
+
+            const modal = document.getElementById('packModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        document.getElementById('btnClosePack').onclick = () => {
+            document.getElementById('packModal').classList.add('opacity-0', 'pointer-events-none');
+        };
+
+        /* Transfer Market Logic */
+        function refreshMarketListings() {
+            state.marketListings = [];
+            // Generate 6 random market cards
+            for (let i = 0; i < 6; i++) {
+                const randTemplate = MASTER_PLAYERS_DATABASE[Math.floor(Math.random() * MASTER_PLAYERS_DATABASE.length)];
+                state.marketListings.push({
+                    ...randTemplate,
+                    marketId: crypto.randomUUID(),
+                    price: Math.round(randTemplate.value * (0.9 + Math.random() * 0.3))
+                });
+            }
+            renderMarket();
+        }
+
+        function renderMarket() {
+            const container = document.getElementById('marketBuyContainer');
+            container.innerHTML = '';
+
+            state.marketListings.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'glass-card p-3 rounded-xl flex items-center justify-between gap-3 border border-slate-800 hover:border-emerald-500/50 transition';
+                card.innerHTML = `
+                    <div class="w-12 h-16 fut-card ${item.tier === 'goat' ? 'goat-card' : item.tier === 'gold-rare' ? 'gold-rare' : item.tier} p-1 flex flex-col justify-between text-center text-[8px]">
+                        <span class="font-mono font-bold text-amber-300">${item.rating}</span>
+                        <span class="font-extrabold truncate">${item.pos}</span>
+                    </div>
+                    <div class="flex-1 text-left">
+                        <h4 class="font-bold text-xs text-white truncate">${item.name}</h4>
+                        <span class="text-[10px] text-slate-400 block">${item.club}</span>
+                        <span class="text-xs font-mono font-black text-amber-400">$${item.price.toLocaleString()}</span>
+                    </div>
+                    <button onclick="buyMarketPlayer('${item.marketId}')" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs">
+                        Buy
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function buyMarketPlayer(marketId) {
+            const item = state.marketListings.find(m => m.marketId === marketId);
+            if (!item) return;
+
+            if (state.cash < item.price) {
+                showCustomDialog('Insufficient Funds', `You need $${item.price.toLocaleString()} to purchase ${item.name}.`);
+                return;
+            }
+
+            state.cash -= item.price;
+            state.clubInventory.push({ ...item, instanceId: crypto.randomUUID() });
+            state.marketListings = state.marketListings.filter(m => m.marketId !== marketId);
+
+            playSoundEffect('coin');
+            updateHUD();
+            renderBench();
+            renderMarket();
+            renderClubInventory();
+            showCustomDialog('Transfer Complete', `Signed ${item.name} to your club!`, 'fa-circle-check');
+        }
+
+        document.getElementById('btnRefreshMarket').onclick = refreshMarketListings;
+
+        /* Club Inventory Grid Render */
+        function renderClubInventory() {
+            const container = document.getElementById('clubInventoryGrid');
+            container.innerHTML = '';
+            const searchVal = document.getElementById('clubSearchInput').value.toLowerCase();
+            const sortVal = document.getElementById('clubSortSelect').value;
+
+            let list = [...state.clubInventory].filter(p => p.name.toLowerCase().includes(searchVal) || p.club.toLowerCase().includes(searchVal) || p.pos.toLowerCase().includes(searchVal));
+
+            if (sortVal === 'rating-desc') list.sort((a, b) => b.rating - a.rating);
+            else if (sortVal === 'rating-asc') list.sort((a, b) => a.rating - b.rating);
+            else if (sortVal === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
+
+            list.forEach(player => {
+                const isOnPitch = isPlayerOnPitch(player);
+                const card = document.createElement('div');
+                card.className = `fut-card ${player.tier === 'goat' ? 'goat-card' : player.tier === 'gold-rare' ? 'gold-rare' : player.tier} p-2 flex flex-col justify-between items-center text-center cursor-pointer hover:scale-105 transition relative`;
+                card.innerHTML = `
+                    ${isOnPitch ? `<span class="absolute top-1 right-1 bg-emerald-600 text-white text-[7px] px-1 rounded font-black">PITCH</span>` : ''}
+                    <div class="flex justify-between w-full text-[9px] font-black">
+                        <span class="text-amber-300 font-mono">${player.rating}</span>
+                        <span class="uppercase">${player.pos}</span>
+                    </div>
+                    <div class="font-extrabold text-[10px] truncate w-full my-1">${player.name}</div>
+                    <span class="text-[8px] opacity-80 font-mono truncate w-full">${player.club}</span>
+                    <button onclick="quickSellSinglePlayer('${player.instanceId}')" class="mt-1 w-full py-0.5 rounded bg-red-950/80 hover:bg-red-800 text-red-300 text-[8px] font-bold border border-red-800/40">
+                        Sell ($${Math.round(player.value * 0.6)})
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function quickSellSinglePlayer(instanceId) {
+            const index = state.clubInventory.findIndex(p => p.instanceId === instanceId);
+            if (index === -1) return;
+            const player = state.clubInventory[index];
+
+            if (isPlayerOnPitch(player)) {
+                showCustomDialog('Action Blocked', 'Cannot sell a player currently starting on your pitch! Clear them first.');
+                return;
+            }
+
+            const val = Math.round(player.value * 0.6);
+            state.cash += val;
+            state.clubInventory.splice(index, 1);
+
+            playSoundEffect('coin');
+            updateHUD();
+            renderBench();
+            renderClubInventory();
+        }
+
+        document.getElementById('btnQuickSellDuplicates').onclick = () => {
+            let soldCount = 0;
+            let totalGain = 0;
+            const seenIds = new Set();
+            const toKeep = [];
+
+            state.clubInventory.forEach(p => {
+                if (seenIds.has(p.id) && !isPlayerOnPitch(p)) {
+                    soldCount++;
+                    totalGain += Math.round(p.value * 0.6);
+                } else {
+                    seenIds.add(p.id);
+                    toKeep.push(p);
+                }
+            });
+
+            state.clubInventory = toKeep;
+            state.cash += totalGain;
+
+            playSoundEffect('coin');
+            updateHUD();
+            renderBench();
+            renderClubInventory();
+            showCustomDialog('Duplicates Quick Sold', `Sold ${soldCount} duplicate players for $${totalGain.toLocaleString()} funds!`, 'fa-coins');
+        };
+
+        /* DOMESTIC LEAGUE SIMULATION ENGINE */
+        function initLeagueSeason() {
+            const league = LEAGUES_DATA[state.activeLeagueKey];
+            state.leagueSeason = {
+                currentFixture: 0,
+                totalFixtures: league.teams.length === 18 ? 34 : 38,
+                table: [],
+                logs: [],
+                record: { w: 0, d: 0, l: 0 },
+                finished: false
+            };
+
+            // Initialize Standings Table
+            state.leagueSeason.table.push({ club: 'My Squad (Player)', p: 0, w: 0, d: 0, l: 0, gd: 0, pts: 0, isUser: true });
+            
+            league.teams.forEach(t => {
+                state.leagueSeason.table.push({ club: t, p: 0, w: 0, d: 0, l: 0, gd: 0, pts: 0, isUser: false });
+            });
+
+            renderLeagueTable();
+            updateSeasonUI();
+        }
+
+        function renderLeagueTable() {
+            const tbody = document.getElementById('leagueTableBody');
+            tbody.innerHTML = '';
+
+            // Sort table by Pts, GD, W
+            const sorted = [...state.leagueSeason.table].sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.w - a.w);
+
+            sorted.forEach((row, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = `border-b border-slate-800/60 ${row.isUser ? 'bg-amber-500/20 font-bold text-amber-300' : idx < 5 ? 'bg-blue-950/30 text-blue-200' : ''}`;
+                tr.innerHTML = `
+                    <td class="p-1.5 font-bold">${idx + 1}${idx < 5 ? '<i class="fa-solid fa-star text-[8px] text-yellow-400 ml-1"></i>' : ''}</td>
+                    <td class="p-1.5 truncate max-w-[120px]">${row.club}</td>
+                    <td class="p-1.5 text-center">${row.p}</td>
+                    <td class="p-1.5 text-center">${row.w}</td>
+                    <td class="p-1.5 text-center">${row.d}</td>
+                    <td class="p-1.5 text-center">${row.l}</td>
+                    <td class="p-1.5 text-center">${row.gd > 0 ? '+' + row.gd : row.gd}</td>
+                    <td class="p-1.5 text-right font-black text-amber-400">${row.pts}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateSeasonUI() {
+            document.getElementById('fixtureCount').innerText = `${state.leagueSeason.currentFixture} / ${state.leagueSeason.totalFixtures}`;
+            document.getElementById('simRecord').innerText = `${state.leagueSeason.record.w}W - ${state.leagueSeason.record.d}D - ${state.leagueSeason.record.l}L`;
+            
+            const pct = Math.round((state.leagueSeason.currentFixture / state.leagueSeason.totalFixtures) * 100);
+            document.getElementById('progressBar').style.width = `${pct}%`;
+        }
+
+        function playSingleLeagueMatch() {
+            if (state.leagueSeason.finished) return;
+
+            state.leagueSeason.currentFixture++;
+            const userOVR = parseInt(document.getElementById('squadRatingText').innerText) || 75;
+            
+            // Pick CPU opponent
+            const cpuTeams = LEAGUES_DATA[state.activeLeagueKey].teams;
+            const oppName = cpuTeams[(state.leagueSeason.currentFixture - 1) % cpuTeams.length];
+            
+            // HARD BOTS: Dynamic CPU rating calculation based on league standings
+            const cpuOVR = Math.min(95, Math.max(78, 82 + Math.floor(Math.random() * 10)));
+
+            // Goal simulation
+            const userGoals = Math.max(0, Math.floor((userOVR / 20) - Math.random() * 3));
+            const oppGoals = Math.max(0, Math.floor((cpuOVR / 20) - Math.random() * 3));
+
+            // Update user table row
+            const userRow = state.leagueSeason.table.find(r => r.isUser);
+            userRow.p++;
+            userRow.gd += (userGoals - oppGoals);
+
+            if (userGoals > oppGoals) {
+                userRow.w++;
+                userRow.pts += 3;
+                state.leagueSeason.record.w++;
+                state.cash += 200; // Match win prize
+            } else if (userGoals === oppGoals) {
+                userRow.d++;
+                userRow.pts += 1;
+                state.leagueSeason.record.d++;
+                state.cash += 80;
+            } else {
+                userRow.l++;
+                state.leagueSeason.record.l++;
+            }
+
+            // Simulate CPU team results against each other
+            state.leagueSeason.table.filter(r => !r.isUser).forEach(r => {
+                r.p++;
+                const r1 = Math.floor(Math.random() * 4);
+                const r2 = Math.floor(Math.random() * 4);
+                r.gd += (r1 - r2);
+                if (r1 > r2) { r.w++; r.pts += 3; }
+                else if (r1 === r2) { r.d++; r.pts += 1; }
+                else { r.l++; }
+            });
+
+            // Commentary Log
+            const logContainer = document.getElementById('matchLogContainer');
+            const entry = document.createElement('div');
+            entry.className = `commentary-entry ${userGoals > oppGoals ? 'goal' : ''}`;
+            entry.innerHTML = `<strong>Matchday ${state.leagueSeason.currentFixture}:</strong> My Squad ${userGoals} - ${oppGoals} ${oppName}`;
+            logContainer.prepend(entry);
+
+            updateHUD();
+            renderLeagueTable();
+            updateSeasonUI();
+
+            // Season End Check
+            if (state.leagueSeason.currentFixture >= state.leagueSeason.totalFixtures) {
+                finishLeagueSeason();
+            }
+        }
+
+        document.getElementById('btnStartSimulation').onclick = () => {
+            playSingleLeagueMatch();
+            playSoundEffect('click');
+        };
+
+        document.getElementById('btnFastSim').onclick = () => {
+            while (state.leagueSeason.currentFixture < state.leagueSeason.totalFixtures) {
+                playSingleLeagueMatch();
+            }
+            playSoundEffect('goal');
+        };
+
+        function finishLeagueSeason() {
+            state.leagueSeason.finished = true;
+            const sorted = [...state.leagueSeason.table].sort((a, b) => b.pts - a.pts || b.gd - a.gd);
+            const userRank = sorted.findIndex(r => r.isUser) + 1;
+            const userRow = sorted.find(r => r.isUser);
+
+            let prize = 1000;
+            if (userRank === 1) prize = 10000;
+            else if (userRank <= 5) prize = 5000;
+
+            state.cash += prize;
+            updateHUD();
+
+            document.getElementById('endPosText').innerText = `#${userRank}`;
+            document.getElementById('endPtsText').innerText = `${userRow.pts} pts`;
+            document.getElementById('endPrizeText').innerText = `$${prize.toLocaleString()}`;
+
+            const qualifiedUCL = userRank <= 5;
+            state.ucl.qualified = qualifiedUCL;
+
+            const uclBanner = document.getElementById('uclQualifyBanner');
+            if (qualifiedUCL) {
+                uclBanner.className = 'p-3 rounded-xl bg-blue-950/90 border border-blue-500/60 text-blue-200 text-xs font-bold flex items-center justify-center gap-2';
+                uclBanner.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 text-base"></i> QUALIFIED FOR UEFA CHAMPIONS LEAGUE (Rank #${userRank}!`;
+                document.getElementById('uclBadge').classList.remove('hidden');
+                document.getElementById('uclLockedNotice').classList.add('hidden');
+                document.getElementById('uclActiveArea').classList.remove('hidden');
+                initUCLTournament();
+            } else {
+                uclBanner.className = 'p-3 rounded-xl bg-red-950/90 border border-red-500/60 text-red-200 text-xs font-bold flex items-center justify-center gap-2';
+                uclBanner.innerHTML = `<i class="fa-solid fa-circle-xmark text-red-400 text-base"></i> MISSED UCL QUALIFICATION (Finished #${userRank}, Top 5 required)`;
+            }
+
+            if (userRank === 1) triggerConfetti();
+
+            const modal = document.getElementById('endSeasonModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        document.getElementById('btnNewSeason').onclick = () => {
+            document.getElementById('endSeasonModal').classList.add('opacity-0', 'pointer-events-none');
+            initLeagueSeason();
+        };
+
+        document.getElementById('btnProceedToUCL').onclick = () => {
+            document.getElementById('endSeasonModal').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('tabUCL').click();
+        };
+
+        /* UEFA CHAMPIONS LEAGUE SIMULATION & COMMENTARY ENGINE */
+        function initUCLTournament() {
+            state.ucl.currentStage = 'Round of 16';
+            state.ucl.finished = false;
+            state.ucl.activeOpponent = UCL_ELITE_TEAMS[Math.floor(Math.random() * UCL_ELITE_TEAMS.length)];
+            
+            document.getElementById('uclStageDisplay').innerText = `STAGE: ${state.ucl.currentStage.toUpperCase()}`;
+            document.getElementById('uclAwayName').innerText = state.ucl.activeOpponent;
+            document.getElementById('uclHomeScore').innerText = '0';
+            document.getElementById('uclAwayScore').innerText = '0';
+
+            renderUCLBracket();
+        }
+
+        function renderUCLBracket() {
+            const container = document.getElementById('uclBracketList');
+            container.innerHTML = `
+                <div class="p-2 bg-slate-900 rounded border border-blue-800">Round of 16: VS ${state.ucl.activeOpponent}</div>
+                <div class="p-2 bg-slate-900/50 rounded text-slate-500">Quarter-Finals: TBD</div>
+                <div class="p-2 bg-slate-900/50 rounded text-slate-500">Semi-Finals: TBD</div>
+                <div class="p-2 bg-slate-900/50 rounded text-slate-500">Final: TBD</div>
+            `;
+        }
+
+        /* Play-by-Play Minute Commentary Generator for UCL */
+        function simulateUCLMatchLive() {
+            const btn = document.getElementById('btnPlayUCLMatch');
+            btn.disabled = true;
+
+            const log = document.getElementById('uclCommentaryLog');
+            log.innerHTML = '';
+
+            let homeGoals = 0;
+            let awayGoals = 0;
+            let minute = 0;
+
+            const userOVR = parseInt(document.getElementById('squadRatingText').innerText) || 80;
+            // HARD UCL BOTS: Opponents are elite (88 - 94 rating)
+            const oppOVR = 88 + Math.floor(Math.random() * 6);
+
+            const interval = setInterval(() => {
+                minute += Math.floor(Math.random() * 8) + 5;
+                if (minute > 90) minute = 90;
+
+                document.getElementById('uclMatchMinute').innerText = `${minute}'`;
+
+                // Event Chance
+                const rand = Math.random();
+                const entry = document.createElement('div');
+
+                if (rand < 0.22) {
+                    // Goal User
+                    homeGoals++;
+                    document.getElementById('uclHomeScore').innerText = homeGoals;
+                    entry.className = 'commentary-entry goal font-bold text-emerald-400';
+                    entry.innerHTML = `<strong>${minute}' GOAL!</strong> Stunning finish by your squad! (${homeGoals} - ${awayGoals})`;
+                    playSoundEffect('goal');
+                } else if (rand < 0.42) {
+                    // Goal Opponent
+                    awayGoals++;
+                    document.getElementById('uclAwayScore').innerText = awayGoals;
+                    entry.className = 'commentary-entry goal font-bold text-red-400';
+                    entry.innerHTML = `<strong>${minute}' GOAL!</strong> ${state.ucl.activeOpponent} scores! (${homeGoals} - ${awayGoals})`;
+                } else if (rand < 0.65) {
+                    entry.className = 'commentary-entry';
+                    entry.innerHTML = `<strong>${minute}'</strong> Great save by the goalkeeper! Big chance missed.`;
+                } else if (rand < 0.85) {
+                    entry.className = 'commentary-entry card';
+                    entry.innerHTML = `<strong>${minute}' Yellow Card!</strong> Tactical tackle in midfield.`;
+                }
+
+                if (entry.innerHTML) log.prepend(entry);
+
+                if (minute >= 90) {
+                    clearInterval(interval);
+                    btn.disabled = false;
+
+                    // UCL Round Advancement
+                    if (homeGoals >= awayGoals) {
+                        advanceUCLRound();
+                    } else {
+                        showCustomDialog('Eliminated from UCL', `Knocked out in ${state.ucl.currentStage} by ${state.ucl.activeOpponent}. Better luck next season!`, 'fa-circle-xmark');
+                    }
+                }
+            }, 600);
+        }
+
+        function advanceUCLRound() {
+            if (state.ucl.currentStage === 'Round of 16') {
+                state.ucl.currentStage = 'Quarter-Finals';
+                state.ucl.activeOpponent = UCL_ELITE_TEAMS[Math.floor(Math.random() * UCL_ELITE_TEAMS.length)];
+                showCustomDialog('Qualified!', 'Victory! Advanced to UCL Quarter-Finals!', 'fa-trophy');
+            } else if (state.ucl.currentStage === 'Quarter-Finals') {
+                state.ucl.currentStage = 'Semi-Finals';
+                state.ucl.activeOpponent = UCL_ELITE_TEAMS[Math.floor(Math.random() * UCL_ELITE_TEAMS.length)];
+                showCustomDialog('Qualified!', 'Victory! Advanced to UCL Semi-Finals!', 'fa-trophy');
+            } else if (state.ucl.currentStage === 'Semi-Finals') {
+                state.ucl.currentStage = 'Final';
+                state.ucl.activeOpponent = UCL_ELITE_TEAMS[Math.floor(Math.random() * UCL_ELITE_TEAMS.length)];
+                showCustomDialog('THE FINAL!', 'You have reached the UEFA Champions League Final!', 'fa-trophy');
+            } else if (state.ucl.currentStage === 'Final') {
+                state.ucl.finished = true;
+                triggerConfetti();
+                state.cash += 25000;
+                updateHUD();
+                showCustomDialog('UCL CHAMPIONS!', 'CONGRATULATIONS! You won the UEFA Champions League! Awarded $25,000 Grand Prize!', 'fa-crown');
+            }
+
+            document.getElementById('uclStageDisplay').innerText = `STAGE: ${state.ucl.currentStage.toUpperCase()}`;
+            document.getElementById('uclAwayName').innerText = state.ucl.activeOpponent;
+            document.getElementById('uclHomeScore').innerText = '0';
+            document.getElementById('uclAwayScore').innerText = '0';
+        }
+
+        document.getElementById('btnPlayUCLMatch').onclick = simulateUCLMatchLive;
+
+        /* Confetti FX Engine */
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        /* TAB SWITCHING SYSTEM */
+        const tabs = [
+            { id: 'tabSquad', view: 'viewSquad' },
+            { id: 'tabMarket', view: 'viewMarket' },
+            { id: 'tabShop', view: 'viewShop' },
+            { id: 'tabClub', view: 'viewClub' },
+            { id: 'tabSeason', view: 'viewSeason' },
+            { id: 'tabUCL', view: 'viewUCL' }
+        ];
+
+        tabs.forEach(t => {
+            document.getElementById(t.id).addEventListener('click', () => {
+                tabs.forEach(other => {
+                    document.getElementById(other.view).classList.add('hidden');
+                    document.getElementById(other.id).className = 'tab-btn px-3 sm:px-4 py-2 rounded-xl glass-card text-slate-300 hover:text-white flex items-center gap-1.5 sm:gap-2 transition border border-slate-800 whitespace-nowrap';
+                });
+
+                document.getElementById(t.view).classList.remove('hidden');
+                document.getElementById(t.id).className = 'tab-btn px-3 sm:px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-black flex items-center gap-1.5 sm:gap-2 transition shadow-md whitespace-nowrap';
+
+                if (t.id === 'tabClub') renderClubInventory();
+                if (t.id === 'tabMarket') renderMarket();
+                playSoundEffect('click');
+            });
+        });
+
+        /* Formation Select Listener */
+        document.getElementById('selectFormation').addEventListener('change', (e) => {
+            state.selectedFormation = e.target.value;
+            renderPitch();
+            calculateSquadStats();
+        });
+
+        /* Pitch Theme Switcher */
+        document.getElementById('selectPitchTheme').addEventListener('change', (e) => {
+            const pitch = document.getElementById('pitchArena');
+            pitch.className = `glass-pitch ${e.target.value} pitch-pattern-striped w-full aspect-[4/5] sm:aspect-[4/3] rounded-2xl p-3 relative flex flex-col justify-between overflow-hidden shadow-2xl`;
+        });
+
+        /* League Choice Dropdown */
+        document.getElementById('selectLeagueChoice').addEventListener('change', (e) => {
+            state.activeLeagueKey = e.target.value;
+            updateHUD();
+            initLeagueSeason();
+        });
+
+        /* Theme Light/Dark Switcher */
+        document.getElementById('btnThemeToggle').addEventListener('click', () => {
+            const root = document.body;
+            if (root.classList.contains('theme-dark')) {
+                root.className = 'h-full theme-light font-sans antialiased select-none flex flex-col justify-between overflow-x-hidden transition-colors duration-300';
+                document.getElementById('themeIcon').className = 'fa-solid fa-sun';
+                document.getElementById('themeLabel').innerText = 'Light';
+            } else {
+                root.className = 'h-full theme-dark font-sans antialiased select-none flex flex-col justify-between overflow-x-hidden transition-colors duration-300';
+                document.getElementById('themeIcon').className = 'fa-solid fa-moon';
+                document.getElementById('themeLabel').innerText = 'Dark';
+            }
+        });
+
+        /* Sound Toggle */
+        document.getElementById('btnSound').addEventListener('click', () => {
+            state.soundEnabled = !state.soundEnabled;
+            document.getElementById('soundIcon').className = state.soundEnabled ? 'fa-solid fa-volume-high text-xs sm:text-sm' : 'fa-solid fa-volume-xmark text-xs sm:text-sm text-red-400';
+        });
+
+        /* Auto-Sell Toggle */
+        document.getElementById('btnAutoSellToggle').addEventListener('click', () => {
+            state.autoSellDuplicates = !state.autoSellDuplicates;
+            updateHUD();
+        });
+
+        window.onload = function() {
+            initStarterTeam();
+        };
+    </script>
+</body>
+</html>
